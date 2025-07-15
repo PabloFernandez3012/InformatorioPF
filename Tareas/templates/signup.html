@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+<!-- Título específico de esta página -->
+{% block title %}Registrarse - Proyecto Django{% endblock %}
+
+<!-- Breadcrumb específico -->
+{% block breadcrumb %}
+    🏠 <a href="{% url 'home' %}" style="color: #6c757d; text-decoration: none;">Inicio</a> 
+    <span style="margin: 0 8px;">›</span> 
+    <strong style="color: #007bff;">📝 Registrarse</strong>
+{% endblock %}
+
+{% block content %}
+
+<!-- 
+=============================================================================
+TEMPLATE DE REGISTRO DE USUARIOS
+=============================================================================
+Formulario para que nuevos usuarios se registren en la aplicación.
+Incluye validaciones personalizadas de contraseña en español.
+-->
+
+<!-- El template ya está comentado arriba, aquí están los comentarios principales: -->
+<!-- 
+- Extiende base.html para mantener la navegación
+- Usa FormularioRegistroPersonalizado para validaciones
+- Muestra errores específicos para cada campo
+- Incluye ayuda visual para requisitos de contraseña
+- Redirige a login si ya tienen cuenta
+-->
+
+<h1>Registrarse</h1>
+
+{% if error %}
+    <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border: 1px solid #f5c6cb; border-radius: 5px; margin-bottom: 15px;">
+        {{ error }}
+    </div>
+{% endif %}
+
+<form action="/signup/" method="post" style="max-width: 500px;">
+    {% csrf_token %}
+    
+    <div style="margin-bottom: 15px;">
+        <label for="{{ form.username.id_for_label }}" style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.username.label }}</label>
+        {{ form.username }}
+        {% if form.username.help_text %}
+            <small style="color: #6c757d; display: block; margin-top: 5px;">{{ form.username.help_text }}</small>
+        {% endif %}
+        {% if form.username.errors %}
+            <div style="color: #dc3545; font-size: 14px; margin-top: 5px;">
+                {% for error in form.username.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="{{ form.password1.id_for_label }}" style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.password1.label }}</label>
+        {{ form.password1 }}
+        {% if form.password1.help_text %}
+            <div style="background-color: #e7f3ff; padding: 10px; border-left: 4px solid #007bff; margin-top: 5px; font-size: 14px;">
+                {{ form.password1.help_text|linebreaks }}
+            </div>
+        {% endif %}
+        {% if form.password1.errors %}
+            <div style="color: #dc3545; font-size: 14px; margin-top: 5px;">
+                {% for error in form.password1.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div style="margin-bottom: 20px;">
+        <label for="{{ form.password2.id_for_label }}" style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.password2.label }}</label>
+        {{ form.password2 }}
+        {% if form.password2.help_text %}
+            <small style="color: #6c757d; display: block; margin-top: 5px;">{{ form.password2.help_text }}</small>
+        {% endif %}
+        {% if form.password2.errors %}
+            <div style="color: #dc3545; font-size: 14px; margin-top: 5px;">
+                {% for error in form.password2.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <button type="submit" style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+        Registrarse
+    </button>
+</form>
+
+<p style="margin-top: 20px;">¿Ya tienes cuenta? <a href="{% url 'entrar' %}">Inicia sesión aquí</a></p>
+
+{% endblock %}

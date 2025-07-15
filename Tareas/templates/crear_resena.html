@@ -1,0 +1,103 @@
+<!-- 
+=============================================================================
+TEMPLATE DE CREAR RESEÑA
+=============================================================================
+Formulario para que los usuarios autenticados escriban reseñas de juegos.
+Solo se puede acceder a esta página si el usuario está logueado.
+-->
+
+{% extends 'base.html' %} <!-- Hereda la estructura de base.html -->
+
+<!-- Título específico de esta página -->
+{% block title %}Escribir Reseña - {{ juego.nombre }} - Juegos - Proyecto Django{% endblock %}
+
+<!-- Breadcrumb específico -->
+{% block breadcrumb %}
+    🏠 <a href="{% url 'home' %}" style="color: #6c757d; text-decoration: none;">Inicio</a> 
+    <span style="margin: 0 8px;">›</span> 
+    🎮 <a href="{% url 'tareas' %}" style="color: #6c757d; text-decoration: none;">Juegos</a>
+    <span style="margin: 0 8px;">›</span> 
+    🎯 <a href="{% url 'detalle_juego' juego.id %}" style="color: #6c757d; text-decoration: none;">{{ juego.nombre }}</a>
+    <span style="margin: 0 8px;">›</span> 
+    <strong style="color: #007bff;">✍️ Escribir Reseña</strong>
+{% endblock %}
+
+{% block content %}
+
+<!-- ===== TÍTULO DEL FORMULARIO ===== -->
+<!-- {{ juego.nombre }} viene de la vista crear_resena() -->
+<h1>Escribir Reseña para "{{ juego.nombre }}"</h1>
+
+<!-- 
+=============================================================================
+FORMULARIO DE CREAR RESEÑA
+=============================================================================
+Este formulario envía datos por POST a la misma URL cuando se envía
+-->
+<form method="post" style="max-width: 500px;">
+    <!-- ===== TOKEN DE SEGURIDAD CSRF ===== -->
+    <!-- Django requiere este token para prevenir ataques CSRF -->
+    {% csrf_token %}
+    
+    <!-- 
+    =============================================================================
+    CAMPO DE PUNTUACIÓN
+    =============================================================================
+    Select dropdown para elegir puntuación del 1 al 5
+    -->
+    <div style="margin-bottom: 15px;">
+        <label for="puntuacion" style="display: block; margin-bottom: 5px;">Puntuación:</label>
+        <!-- El 'name="puntuacion"' es lo que recibe request.POST['puntuacion'] en la vista -->
+        <select name="puntuacion" id="puntuacion" required style="width: 100%; padding: 8px;">
+            <option value="">Selecciona una puntuación</option>
+            <!-- Cada option tiene un value que se envía al servidor -->
+            <option value="1">1 - Muy malo</option>
+            <option value="2">2 - Malo</option>
+            <option value="3">3 - Regular</option>
+            <option value="4">4 - Bueno</option>
+            <option value="5">5 - Excelente</option>
+        </select>
+    </div>
+    
+    <!-- 
+    =============================================================================
+    CAMPO DE COMENTARIO
+    =============================================================================
+    Textarea para que el usuario escriba su opinión detallada
+    -->
+    <div style="margin-bottom: 15px;">
+        <label for="comentario" style="display: block; margin-bottom: 5px;">Comentario:</label>
+        <!-- El 'name="comentario"' es lo que recibe request.POST['comentario'] en la vista -->
+        <textarea name="comentario" 
+                  id="comentario" 
+                  rows="5" 
+                  required 
+                  style="width: 100%; padding: 8px;" 
+                  placeholder="Escribe tu opinión sobre el juego...">
+        </textarea>
+    </div>
+    
+    <!-- 
+    =============================================================================
+    BOTONES DE ACCIÓN
+    =============================================================================
+    Botón para enviar el formulario y enlace para cancelar
+    -->
+    
+    <!-- ===== BOTÓN DE ENVIAR ===== -->
+    <!-- type="submit" hace que el formulario se envíe por POST -->
+    <button type="submit" 
+            style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+        Publicar Reseña
+    </button>
+    
+    <!-- ===== BOTÓN DE CANCELAR ===== -->
+    <!-- Enlace que regresa al detalle del juego sin guardar nada -->
+    <!-- {% url 'detalle_juego' juego.id %} genera URL como /juego/5/ -->
+    <a href="{% url 'detalle_juego' juego.id %}" 
+       style="margin-left: 10px; padding: 10px 20px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 5px;">
+       Cancelar
+    </a>
+</form>
+
+{% endblock %}

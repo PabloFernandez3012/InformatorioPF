@@ -1,0 +1,70 @@
+<!-- 
+=============================================================================
+TEMPLATE DE INICIO DE SESIÓN
+=============================================================================
+Formulario para que usuarios existentes inicien sesión en la aplicación.
+-->
+
+{% extends 'base.html' %} <!-- Hereda la estructura de base.html -->
+
+<!-- Título específico de esta página -->
+{% block title %}Entrar - Proyecto Django{% endblock %}
+
+<!-- Breadcrumb específico -->
+{% block breadcrumb %}
+    🏠 <a href="{% url 'home' %}" style="color: #6c757d; text-decoration: none;">Inicio</a> 
+    <span style="margin: 0 8px;">›</span> 
+    <strong style="color: #007bff;">🔑 Entrar</strong>
+{% endblock %}
+
+{% block content %}
+
+<!-- ===== TÍTULO DE LA PÁGINA ===== -->
+<h1>Iniciar Sesión</h1>
+
+<!-- 
+=============================================================================
+MOSTRAR ERRORES DE AUTENTICACIÓN
+=============================================================================
+Si las credenciales son incorrectas, la vista envía una variable 'error'
+-->
+{% if error %}
+    <!-- Mensaje de error con estilo rojo -->
+    <p style="color: red;">{{ error }}</p>
+{% endif %}
+
+<!-- 
+=============================================================================
+FORMULARIO DE INICIO DE SESIÓN
+=============================================================================
+Formulario simple con usuario y contraseña
+-->
+<form method="post">
+    <!-- ===== TOKEN DE SEGURIDAD CSRF ===== -->
+    {% csrf_token %}
+    
+    <!-- ===== CAMPO DE NOMBRE DE USUARIO ===== -->
+    <div>
+        <label for="username">Usuario:</label>
+        <!-- name="username" es lo que recibe request.POST['username'] en la vista -->
+        <input type="text" name="username" id="username" required>
+    </div>
+    
+    <!-- ===== CAMPO DE CONTRASEÑA ===== -->
+    <div>
+        <label for="password">Contraseña:</label>
+        <!-- name="password" es lo que recibe request.POST['password'] en la vista -->
+        <!-- type="password" oculta el texto mientras se escribe -->
+        <input type="password" name="password" id="password" required>
+    </div>
+    
+    <!-- ===== BOTÓN DE ENVÍO ===== -->
+    <!-- type="submit" envía el formulario por POST a la misma URL -->
+    <button type="submit">Entrar</button>
+</form>
+
+<!-- ===== ENLACE PARA REGISTRO ===== -->
+<!-- Si no tienen cuenta, pueden ir a registrarse -->
+<p>¿No tienes cuenta? <a href="{% url 'signup' %}">Regístrate aquí</a></p>
+
+{% endblock %}

@@ -1,0 +1,317 @@
+<!-- 
+=============================================================================
+TEMPLATE DE LISTA DE JUEGOS
+=============================================================================
+Esta página muestra todos los juegos disponibles en la base de datos.
+Extiende el template base para mantener la navegación y estructura.
+-->
+
+{% extends 'base.html' %} <!-- Hereda la estructura de base.html -->
+
+<!-- Título específico de esta página -->
+{% block title %}Juegos - Proyecto Django{% endblock %}
+
+<!-- Breadcrumb específico -->
+{% block breadcrumb %}
+    🏠 <a href="{% url 'home' %}" style="color: #6c757d; text-decoration: none;">Inicio</a> 
+    <span style="margin: 0 8px;">›</span> 
+    <strong style="color: #007bff;">🎮 Juegos</strong>
+{% endblock %}
+
+<!-- Inicia el bloque de contenido específico de esta página -->
+{% block content %}
+
+<!-- ===== TÍTULO PRINCIPAL DE LA PÁGINA ===== -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="margin: 0;">Juegos</h1>
+    
+    <!-- ===== BOTÓN PARA MOSTRAR/OCULTAR BÚSQUEDA ===== -->
+    <button id="toggleBusqueda" 
+            onclick="toggleFormularioBusqueda()" 
+            style="background-color: #007bff; color: white; border: none; padding: 12px 16px; border-radius: 50%; cursor: pointer; font-size: 18px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: all 0.3s ease;"
+            title="Mostrar/Ocultar búsqueda">
+        🔍
+    </button>
+</div>
+
+<!-- 
+=============================================================================
+FORMULARIO DE BÚSQUEDA Y FILTROS (INICIALMENTE OCULTO)
+=============================================================================
+Permite buscar juegos por nombre y filtrar por diferentes criterios
+-->
+<div id="formularioBusqueda" 
+     style="background-color: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #dee2e6; display: none; animation: slideDown 0.3s ease;">
+    <h3 style="margin-top: 0; color: #495057;">🔍 Buscar y Filtrar Juegos</h3>
+    
+    <form method="GET" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: end;">
+        
+        <!-- ===== CAMPO DE BÚSQUEDA POR NOMBRE ===== -->
+        <div>
+            <label for="busqueda" style="display: block; margin-bottom: 5px; font-weight: bold; color: #495057;">Nombre del juego:</label>
+            <input type="text" 
+                   name="busqueda" 
+                   id="busqueda" 
+                   value="{{ busqueda_actual }}" 
+                   placeholder="Ej: Minecraft, FIFA..."
+                   style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 5px;">
+        </div>
+        
+        <!-- ===== FILTRO POR CATEGORÍA ===== -->
+        <div>
+            <label for="categoria" style="display: block; margin-bottom: 5px; font-weight: bold; color: #495057;">Categoría:</label>
+            <select name="categoria" id="categoria" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 5px;">
+                <option value="">Todas las categorías</option>
+                {% for categoria in todas_categorias %}
+                    <option value="{{ categoria.nombre }}" 
+                            {% if categoria.nombre == categoria_actual %}selected{% endif %}>
+                        {{ categoria.get_nombre_display }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <!-- ===== FILTRO POR ESTUDIO ===== -->
+        <div>
+            <label for="estudio" style="display: block; margin-bottom: 5px; font-weight: bold; color: #495057;">Estudio:</label>
+            <select name="estudio" id="estudio" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 5px;">
+                <option value="">Todos los estudios</option>
+                {% for estudio in todos_estudios %}
+                    <option value="{{ estudio }}" 
+                            {% if estudio == estudio_actual %}selected{% endif %}>
+                        {{ estudio }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <!-- ===== FILTRO POR AÑO ===== -->
+        <div>
+            <label for="ano" style="display: block; margin-bottom: 5px; font-weight: bold; color: #495057;">Año de publicación:</label>
+            <select name="ano" id="ano" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 5px;">
+                <option value="">Todos los años</option>
+                {% for ano in todos_anos %}
+                    <option value="{{ ano }}" 
+                            {% if ano|stringformat:"s" == ano_actual %}selected{% endif %}>
+                        {{ ano }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <!-- ===== BOTONES DE ACCIÓN ===== -->
+        <div style="display: flex; gap: 10px;">
+            <button type="submit" 
+                    style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                🔍 Buscar
+            </button>
+            <a href="{% url 'tareas' %}" 
+               style="background-color: #6c757d; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+                🔄 Limpiar
+            </a>
+        </div>
+    </form>
+    
+    <!-- ===== MOSTRAR RESULTADOS DE BÚSQUEDA ===== -->
+    {% if busqueda_actual or categoria_actual or estudio_actual or ano_actual %}
+        <div style="margin-top: 15px; padding: 10px; background-color: #d1ecf1; border-left: 4px solid #bee5eb; border-radius: 5px;">
+            <strong>Filtros activos:</strong>
+            {% if busqueda_actual %}<span style="background-color: #007bff; color: white; padding: 2px 8px; border-radius: 15px; font-size: 12px; margin: 0 5px;">Búsqueda: "{{ busqueda_actual }}"</span>{% endif %}
+            {% if categoria_actual %}<span style="background-color: #28a745; color: white; padding: 2px 8px; border-radius: 15px; font-size: 12px; margin: 0 5px;">Categoría: {{ categoria_actual }}</span>{% endif %}
+            {% if estudio_actual %}<span style="background-color: #ffc107; color: black; padding: 2px 8px; border-radius: 15px; font-size: 12px; margin: 0 5px;">Estudio: {{ estudio_actual }}</span>{% endif %}
+            {% if ano_actual %}<span style="background-color: #17a2b8; color: white; padding: 2px 8px; border-radius: 15px; font-size: 12px; margin: 0 5px;">Año: {{ ano_actual }}</span>{% endif %}
+            <br><strong>Resultados encontrados: {{ total_resultados }}</strong>
+        </div>
+    {% endif %}
+</div>
+
+<!-- 
+=============================================================================
+VERIFICACIÓN DE EXISTENCIA DE JUEGOS
+=============================================================================
+La variable juegos viene de la vista tareas() en views.py
+La condición if juegos verifica si la lista no está vacía
+-->
+{% if tareas %}
+    <!-- ===== CONTENEDOR DE LA LISTA DE JUEGOS ===== -->
+    <div class="juegos-lista">
+        <!-- 
+        =============================================================================
+        BUCLE FOR PARA MOSTRAR CADA JUEGO
+        =============================================================================
+        El bucle for itera sobre cada objeto Juego de la base de datos
+        -->
+        {% for juego in tareas %}
+            <!-- ===== TARJETA DE CADA JUEGO ===== -->
+            <div class="juego-card" style="border: 1px solid #ccc; margin: 10px; padding: 15px;">
+                <!-- Título del juego con enlace al detalle -->
+                <!-- {{ juego.nombre }} accede al campo nombre del modelo Juego -->
+                <!-- La etiqueta url genera URL como /juego/5/ -->
+                <h3><a href="{% url 'detalle_juego' juego.id %}">{{ juego.nombre }}</a></h3>
+                
+                <!-- Información del estudio desarrollador -->
+                <p><strong>Estudio:</strong> {{ juego.estudio }}</p>
+                
+                <!-- 
+                =============================================================================
+                CATEGORÍAS DEL JUEGO
+                =============================================================================
+                Muestra las categorías del juego como etiquetas coloridas
+                -->
+                {% if juego.categorias.all %}
+                    <div style="margin: 10px 0;">
+                        <strong>Categorías:</strong>
+                        <div style="margin-top: 5px;">
+                            {% for categoria in juego.categorias.all %}
+                                <span style="background-color: #007bff; color: white; padding: 3px 8px; border-radius: 12px; font-size: 12px; margin-right: 5px; margin-bottom: 3px; display: inline-block;">
+                                    {{ categoria.get_nombre_display }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <p style="color: #6c757d; font-style: italic;">Sin categorías asignadas</p>
+                {% endif %}
+                
+                <!-- Fecha de publicación formateada -->
+                <!-- El filtro date con formato d/m/Y formatea la fecha -->
+                <p><strong>Fecha de publicación:</strong> {{ juego.fecha_publicacion|date:"d/m/Y" }}</p>
+                
+                <!-- 
+                =============================================================================
+                PUNTUACIÓN PROMEDIO Y NÚMERO DE RESEÑAS
+                =============================================================================
+                Muestra el promedio de puntuaciones y el total de reseñas
+                -->
+                {% if juego.numero_resenas > 0 %}
+                    <div style="background-color: #f8f9fa; padding: 8px; border-radius: 5px; margin: 10px 0;">
+                        <strong>Puntuación:</strong> {{ juego.estrellas_promedio_visual }}
+                        <small style="color: #6c757d;">({{ juego.numero_resenas }} reseña{{ juego.numero_resenas|pluralize:"s" }})</small>
+                    </div>
+                {% else %}
+                    <div style="background-color: #f8f9fa; padding: 8px; border-radius: 5px; margin: 10px 0; color: #6c757d;">
+                        <em>Sin reseñas aún</em>
+                    </div>
+                {% endif %}
+                
+                <!-- Descripción del juego -->
+                <p>{{ juego.descripcion }}</p>
+                
+                <!-- Fecha cuando se agregó al sistema -->
+                <small>Agregado: {{ juego.creado|date:"d/m/Y" }}</small>
+                
+                <!-- 
+                =============================================================================
+                INDICADOR DE JUEGO IMPORTANTE
+                =============================================================================
+                Si el campo importante es True, muestra una estrella
+                -->
+                {% if juego.importante %}
+                    <span style="color: red; font-weight: bold;"> ⭐ Destacado</span>
+                {% endif %}
+            </div>
+        {% endfor %} <!-- Fin del bucle de juegos -->
+    </div>
+{% else %}
+    <!-- ===== MENSAJE CUANDO NO HAY JUEGOS ===== -->
+    <!-- Se muestra si la lista de juegos está vacía -->
+    <p>No hay juegos disponibles en este momento.</p>
+{% endif %}
+
+<!-- 
+=============================================================================
+JAVASCRIPT PARA FUNCIONALIDAD DE BÚSQUEDA
+=============================================================================
+Controla el mostrar/ocultar del formulario de búsqueda
+-->
+<script>
+    /**
+     * Función para mostrar u ocultar el formulario de búsqueda
+     * Cambia entre display: none y display: block con animación
+     */
+    function toggleFormularioBusqueda() {
+        const formulario = document.getElementById('formularioBusqueda');
+        const boton = document.getElementById('toggleBusqueda');
+        
+        if (formulario.style.display === 'none' || formulario.style.display === '') {
+            // Mostrar el formulario
+            formulario.style.display = 'block';
+            formulario.style.animation = 'slideDown 0.3s ease';
+            boton.style.backgroundColor = '#28a745'; // Verde cuando está abierto
+            boton.title = 'Ocultar búsqueda';
+        } else {
+            // Ocultar el formulario
+            formulario.style.animation = 'slideUp 0.3s ease';
+            setTimeout(() => {
+                formulario.style.display = 'none';
+            }, 250);
+            boton.style.backgroundColor = '#007bff'; // Azul cuando está cerrado
+            boton.title = 'Mostrar búsqueda';
+        }
+    }
+    
+    /**
+     * Si hay filtros activos, mostrar automáticamente el formulario
+     * Esto ayuda al usuario a ver qué filtros están aplicados
+     */
+    document.addEventListener('DOMContentLoaded', function() {
+        // Verificar si hay filtros activos
+        const busquedaActiva = '{{ busqueda_actual }}' !== '';
+        const categoriaActiva = '{{ categoria_actual }}' !== '';
+        const estudioActivo = '{{ estudio_actual }}' !== '';
+        const anoActivo = '{{ ano_actual }}' !== '';
+        
+        const tieneBindFiltros = busquedaActiva || categoriaActiva || estudioActivo || anoActivo;
+        
+        if (tieneBindFiltros) {
+            // Si hay filtros activos, mostrar el formulario automáticamente
+            toggleFormularioBusqueda();
+        }
+    });
+</script>
+
+<!-- 
+=============================================================================
+CSS PARA ANIMACIONES
+=============================================================================
+Define las animaciones de deslizamiento del formulario
+-->
+<style>
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+    }
+    
+    /* Efecto hover para el botón de búsqueda */
+    #toggleBusqueda:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    
+    /* Responsive: En pantallas pequeñas, hacer el botón un poco más grande */
+    @media (max-width: 768px) {
+        #toggleBusqueda {
+            padding: 14px 18px;
+            font-size: 20px;
+        }
+    }
+</style>
+
+{% endblock %} <!-- Fin del bloque de contenido -->

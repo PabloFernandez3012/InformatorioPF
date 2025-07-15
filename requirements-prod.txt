@@ -1,0 +1,57 @@
+# =============================================================================
+# REQUIREMENTS-PROD.TXT - DEPENDENCIAS DE PRODUCCIÓN
+# =============================================================================
+# Este archivo contiene las dependencias necesarias para ejecutar
+# el proyecto en un entorno de producción.
+#
+# Para instalar en producción, ejecuta:
+# pip install -r requirements-prod.txt
+# =============================================================================
+
+# ===== INCLUIR DEPENDENCIAS BASE =====
+-r requirements.txt
+
+# ===== SERVIDOR WEB =====
+# Gunicorn - Servidor WSGI para aplicaciones Django en producción
+gunicorn==21.2.0
+
+# ===== ARCHIVOS ESTÁTICOS =====
+# WhiteNoise - Servidor de archivos estáticos eficiente
+whitenoise==6.5.0
+
+# ===== BASE DE DATOS PRODUCCIÓN =====
+# PostgreSQL - Base de datos recomendada para producción
+psycopg2-binary==2.9.7
+
+# ===== SEGURIDAD =====
+# Django Security - Middleware adicional de seguridad
+django-security==0.19.0
+
+# ===== MONITOREO Y LOGGING =====
+# Sentry SDK - Monitoreo de errores en tiempo real
+sentry-sdk[django]==1.32.0
+
+# ===== CACHÉ =====
+# Redis - Sistema de caché para producción
+redis==4.6.0
+django-redis==5.3.0
+
+# ===== CONFIGURACIÓN =====
+# Django Environ - Manejo de variables de entorno
+django-environ==0.10.0
+
+# ===== COMPRESIÓN =====
+# Django Compressor - Compresión de CSS y JS
+django-compressor==4.4
+
+# ===== CORS (si es necesario para API) =====
+# Django CORS Headers - Manejo de CORS para APIs
+django-cors-headers==4.2.0
+
+# ===== ESCALABILIDAD =====
+# Celery - Sistema de tareas asíncronas
+celery==5.3.1
+
+# ===== BACKUP =====
+# Django Backup - Sistema de respaldos automáticos
+django-dbbackup==4.0.2

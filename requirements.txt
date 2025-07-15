@@ -1,0 +1,79 @@
+# =============================================================================
+# REQUIREMENTS.TXT - DEPENDENCIAS DEL PROYECTO DJANGO
+# =============================================================================
+# Este archivo contiene todas las dependencias necesarias para ejecutar
+# el proyecto de gestión de juegos con sistema de reseñas.
+#
+# Para instalar todas las dependencias, ejecuta:
+# pip install -r requirements.txt
+# =============================================================================
+
+# ===== FRAMEWORK PRINCIPAL =====
+# Django - Framework web principal del proyecto
+Django==5.2.4
+
+# ===== BASE DE DATOS =====
+# SQLite viene incluido con Python, no requiere instalación adicional
+# Para proyectos en producción, considera usar PostgreSQL o MySQL
+
+# ===== DEPENDENCIAS DE DJANGO =====
+# Estas dependencias son automáticamente instaladas con Django,
+# pero las listamos para documentación y compatibilidad
+
+# asgiref - Soporte para aplicaciones ASGI
+asgiref>=3.6.0
+
+# sqlparse - Parser SQL para Django
+sqlparse>=0.4.2
+
+# tzdata - Datos de zona horaria (necesario en Windows)
+tzdata>=2021.1
+
+# ===== DEPENDENCIAS OPCIONALES PARA DESARROLLO =====
+# Descomenta las siguientes líneas si quieres herramientas adicionales
+
+# Django Debug Toolbar - Herramienta de debugging para desarrollo
+# django-debug-toolbar==4.2.0
+
+# Pillow - Manejo de imágenes (útil si planeas agregar imágenes de juegos)
+# Pillow==10.0.0
+
+# Django Extensions - Utilidades adicionales para Django
+# django-extensions==3.2.3
+
+# ===== DEPENDENCIAS PARA PRODUCCIÓN =====
+# Descomenta estas líneas para deployment en producción
+
+# Gunicorn - Servidor WSGI para producción
+# gunicorn==21.2.0
+
+# WhiteNoise - Servidor de archivos estáticos
+# whitenoise==6.5.0
+
+# PostgreSQL adapter - Para usar PostgreSQL en producción
+# psycopg2-binary==2.9.7
+
+# Django CORS Headers - Para APIs que requieren CORS
+# django-cors-headers==4.2.0
+
+# ===== HERRAMIENTAS DE CALIDAD DE CÓDIGO =====
+# Descomenta para herramientas de linting y formateo
+
+# Black - Formateador de código Python
+# black==23.7.0
+
+# Flake8 - Linter para Python
+# flake8==6.0.0
+
+# ===== NOTAS IMPORTANTES =====
+# 1. Este archivo está optimizado para Django 5.2.4
+# 2. Las versiones están fijadas para garantizar compatibilidad
+# 3. Para actualizar dependencias, usa: pip-tools o pip freeze > requirements.txt
+# 4. Siempre usa un entorno virtual para evitar conflictos
+# 5. Para producción, considera usar requirements-prod.txt separado
+
+# ===== INFORMACIÓN DEL PROYECTO =====
+# Proyecto: Sistema de Gestión de Juegos con Reseñas
+# Versión de Python recomendada: 3.8+
+# Versión de Django: 5.2.4
+# Base de datos: SQLite (desarrollo) / PostgreSQL (producción recomendada)

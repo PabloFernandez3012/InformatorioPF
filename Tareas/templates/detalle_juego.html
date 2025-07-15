@@ -1,0 +1,184 @@
+<!-- 
+=============================================================================
+TEMPLATE DE DETALLE DE JUEGO
+=============================================================================
+Esta página muestra información detallada de un juego específico,
+incluyendo todas sus reseñas y la opción de escribir una nueva reseña.
+-->
+
+{% extends 'base.html' %} <!-- Hereda la estructura de base.html -->
+
+<!-- Título específico de esta página -->
+{% block title %}{{ juego.nombre }} - Juegos - Proyecto Django{% endblock %}
+
+<!-- Breadcrumb específico -->
+{% block breadcrumb %}
+    🏠 <a href="{% url 'home' %}" style="color: #6c757d; text-decoration: none;">Inicio</a> 
+    <span style="margin: 0 8px;">›</span> 
+    🎮 <a href="{% url 'tareas' %}" style="color: #6c757d; text-decoration: none;">Juegos</a>
+    <span style="margin: 0 8px;">›</span> 
+    <strong style="color: #007bff;">🎯 {{ juego.nombre }}</strong>
+{% endblock %}
+
+{% block content %}
+
+<!-- 
+=============================================================================
+INFORMACIÓN PRINCIPAL DEL JUEGO
+=============================================================================
+Las variables 'juego', 'resenas' y 'usuario_ya_reseno' vienen de la vista
+detalle_juego() en views.py
+-->
+
+<!-- ===== TÍTULO DEL JUEGO ===== -->
+<h1>{{ juego.nombre }}</h1>
+
+<!-- ===== INFORMACIÓN DETALLADA DEL JUEGO ===== -->
+<div style="margin-bottom: 20px;">
+    <!-- Estudio desarrollador -->
+    <p><strong>Estudio:</strong> {{ juego.estudio }}</p>
+    
+    <!-- 
+    =============================================================================
+    CATEGORÍAS DEL JUEGO EN DETALLE
+    =============================================================================
+    Muestra las categorías con un diseño más detallado
+    -->
+    {% if juego.categorias.all %}
+        <div style="margin: 15px 0;">
+            <p style="margin-bottom: 8px;"><strong>Categorías:</strong></p>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                {% for categoria in juego.categorias.all %}
+                    <span style="background: linear-gradient(45deg, #007bff, #0056b3); color: white; padding: 6px 12px; border-radius: 20px; font-size: 14px; font-weight: 500; box-shadow: 0 2px 4px rgba(0,123,255,0.3);">
+                        {{ categoria.get_nombre_display }}
+                    </span>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <p style="color: #6c757d; font-style: italic; margin: 15px 0;">Este juego no tiene categorías asignadas</p>
+    {% endif %}
+    
+    <!-- Fecha de publicación original del juego -->
+    <p><strong>Fecha de publicación:</strong> {{ juego.fecha_publicacion|date:"d/m/Y" }}</p>
+    
+    <!-- 
+    =============================================================================
+    PUNTUACIÓN PROMEDIO EN DETALLE
+    =============================================================================
+    Muestra información detallada sobre las puntuaciones
+    -->
+    {% if juego.numero_resenas > 0 %}
+        <div style="background-color: #e7f3ff; padding: 15px; border-left: 4px solid #007bff; margin: 15px 0;">
+            <h4 style="margin: 0 0 10px 0; color: #007bff;">Puntuación de los usuarios</h4>
+            <div style="font-size: 18px;">
+                <strong>{{ juego.estrellas_promedio_visual }}</strong>
+            </div>
+            <small style="color: #6c757d;">
+                Basado en {{ juego.numero_resenas }} reseña{{ juego.numero_resenas|pluralize:"s" }}
+            </small>
+        </div>
+    {% else %}
+        <div style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #6c757d; margin: 15px 0;">
+            <em style="color: #6c757d;">Este juego aún no tiene reseñas</em>
+        </div>
+    {% endif %}
+    
+    <!-- Descripción completa del juego -->
+    <p><strong>Descripción:</strong> {{ juego.descripcion }}</p>
+    
+    <!-- Fecha cuando se agregó al sistema -->
+    <small>Agregado: {{ juego.creado|date:"d/m/Y" }}</small>
+</div>
+
+<!-- 
+=============================================================================
+SECCIÓN DE CREAR RESEÑA (SOLO PARA USUARIOS AUTENTICADOS)
+=============================================================================
+Esta sección cambia según el estado de autenticación del usuario
+-->
+{% if user.is_authenticated %}
+    <!-- ===== USUARIO AUTENTICADO ===== -->
+    {% if not usuario_ya_reseno %}
+        <!-- Si el usuario NO ha hecho una reseña, mostrar botón para crear -->
+        <div style="margin-top: 20px;">
+            <!-- Enlace que lleva al formulario de crear reseña -->
+            <a href="{% url 'crear_resena' juego.id %}" 
+               style="background-color: #007bff; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px;">
+               Escribir Reseña
+            </a>
+        </div>
+    {% else %}
+        <!-- Si el usuario YA hizo una reseña, mostrar mensaje confirmatorio -->
+        <p style="color: green; margin-top: 10px;">✓ Ya has escrito una reseña para este juego</p>
+    {% endif %}
+{% else %}
+    <!-- ===== USUARIO NO AUTENTICADO ===== -->
+    <!-- Invitar al usuario a iniciar sesión para poder reseñar -->
+    <p style="margin-top: 10px;">
+        <a href="{% url 'entrar' %}">Inicia sesión</a> para escribir una reseña
+    </p>
+{% endif %}
+
+<!-- 
+=============================================================================
+SECCIÓN DE RESEÑAS EXISTENTES
+=============================================================================
+Muestra todas las reseñas que otros usuarios han hecho de este juego
+-->
+
+<!-- ===== TÍTULO DE LA SECCIÓN DE RESEÑAS ===== -->
+<!-- {{ resenas.count }} cuenta automáticamente el número de reseñas -->
+<h3 style="margin-top: 30px;">Reseñas ({{ resenas.count }})</h3>
+
+<!-- ===== VERIFICAR SI EXISTEN RESEÑAS ===== -->
+{% if resenas %}
+    <!-- ===== BUCLE PARA MOSTRAR CADA RESEÑA ===== -->
+    {% for resena in resenas %}
+        <div style="border: 1px solid #ddd; margin: 10px 0; padding: 15px; border-radius: 5px;">
+            <!-- Header de la reseña: usuario y puntuación -->
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <!-- Nombre del usuario que escribió la reseña -->
+                <strong>{{ resena.usuario.username }}</strong>
+                
+                <!-- 
+                =============================================================================
+                SISTEMA DE ESTRELLAS PARA PUNTUACIÓN
+                =============================================================================
+                Este bucle genera estrellas según la puntuación (1-5)
+                "12345" es una cadena de 5 caracteres para iterar 5 veces
+                -->
+                <div>
+                    {% for i in "12345" %}
+                        <!-- Si el número del bucle es <= puntuación, mostrar estrella llena -->
+                        {% if forloop.counter <= resena.puntuacion %}
+                            ⭐
+                        {% else %}
+                            <!-- Si no, mostrar estrella vacía -->
+                            ☆
+                        {% endif %}
+                    {% endfor %}
+                    <!-- Mostrar también la puntuación numérica -->
+                    ({{ resena.puntuacion }}/5)
+                </div>
+            </div>
+            
+            <!-- ===== CONTENIDO DE LA RESEÑA ===== -->
+            <!-- Comentario escrito por el usuario -->
+            <p style="margin: 10px 0;">{{ resena.comentario }}</p>
+            
+            <!-- Fecha y hora cuando se escribió la reseña -->
+            <!-- |date:"d/m/Y H:i" formatea fecha y hora -->
+            <small style="color: #666;">{{ resena.fecha_creacion|date:"d/m/Y H:i" }}</small>
+        </div>
+    {% endfor %}
+{% else %}
+    <!-- ===== MENSAJE CUANDO NO HAY RESEÑAS ===== -->
+    <p>No hay reseñas para este juego aún.</p>
+{% endif %}
+
+<!-- ===== ENLACE PARA VOLVER A LA LISTA ===== -->
+<!-- Botón para regresar a la lista de juegos -->
+<a href="{% url 'tareas' %}" style="margin-top: 20px; display: inline-block;">← Volver a Juegos</a>
+
+{% endblock %}
