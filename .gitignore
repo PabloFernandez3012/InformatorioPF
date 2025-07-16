@@ -48,6 +48,30 @@ htmlcov/
 .tox/
 .nox/
 .coverage
+
+# ===== ARCHIVOS DE OPTIMIZACIÓN Y LIMPIEZA =====
+# Scripts de diagnóstico y prueba
+diagnostico_*.py
+probar_*.py
+verificar_*.py
+test_*.py
+test_*.html
+*_test.py
+*_test.html
+
+# Archivos de respaldo
+*_backup.*
+*_backup/
+*_corrupted.*
+*_old.*
+*_nuevo.*
+*_copy.*
+
+# Scripts de configuración temporales
+asignar_*.py
+configurar_*.py
+setup_temp.py
+limpiar_*.py
 .coverage.*
 .cache
 nosetests.xml
