@@ -11,6 +11,56 @@
     <strong style="color: #007bff;">🎯 {{ juego.nombre }}</strong>
 {% endblock %}
 
+<!-- CSS personalizado para los promedios de puntuación -->
+<style>
+.rating-score {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 2px solid;
+    transition: all 0.3s ease;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.rating-score:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.rating-score.excellent {
+    color: #15803d !important;
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%) !important;
+    border-color: #16a34a !important;
+}
+
+.rating-score.good {
+    color: #ca8a04 !important;
+    background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%) !important;
+    border-color: #d97706 !important;
+}
+
+.rating-score.average {
+    color: #ea580c !important;
+    background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%) !important;
+    border-color: #f97316 !important;
+}
+
+.rating-score.poor {
+    color: #dc2626 !important;
+    background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%) !important;
+    border-color: #ef4444 !important;
+}
+
+.rating-icon {
+    margin-right: 4px;
+    font-size: 1rem;
+}
+</style>
+
 {% block content %}
 <div class="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
     <!-- Main Content -->
@@ -59,9 +109,31 @@
                                 {% endif %}
                             {% endfor %}
                         </div>
-                        <p class="ml-3 text-sm text-gray-600">
-                            {{ juego.promedio_puntuacion|floatformat:1 }}/5 
-                            ({{ juego.total_resenas }} reseña{{ juego.total_resenas|pluralize }})
+                        <p class="ml-3 text-sm flex items-center">
+                            {% if juego.promedio_puntuacion <= 2.5 %}
+                                <span class="rating-score poor">
+                                    <span class="rating-icon">📉</span>
+                                    {{ juego.promedio_puntuacion|floatformat:1 }}/5
+                                </span>
+                            {% elif juego.promedio_puntuacion == 3.0 %}
+                                <span class="rating-score good">
+                                    <span class="rating-icon">⚡</span>
+                                    {{ juego.promedio_puntuacion|floatformat:1 }}/5
+                                </span>
+                            {% elif juego.promedio_puntuacion >= 4.0 %}
+                                <span class="rating-score excellent">
+                                    <span class="rating-icon">🏆</span>
+                                    {{ juego.promedio_puntuacion|floatformat:1 }}/5
+                                </span>
+                            {% else %}
+                                <span class="rating-score average">
+                                    <span class="rating-icon">📊</span>
+                                    {{ juego.promedio_puntuacion|floatformat:1 }}/5
+                                </span>
+                            {% endif %}
+                            <span class="text-gray-500 ml-3 text-xs">
+                                ({{ juego.total_resenas }} reseña{{ juego.total_resenas|pluralize }})
+                            </span>
                         </p>
                     </div>
                 </div>

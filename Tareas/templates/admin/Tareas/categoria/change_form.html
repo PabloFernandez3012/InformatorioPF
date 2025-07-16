@@ -1,0 +1,169 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block title %}
+    {% if add %}
+        🎯 Crear Nueva Categoría
+    {% else %}
+        ✏️ Editar Categoría: {{ original.get_nombre_display }}
+    {% endif %}
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        /* Estilos para el formulario de categorías */
+        .form-row {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-row label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .form-row input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #ced4da;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.2s ease;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        .form-row input[type="text"]:focus {
+            border-color: #007cba;
+            box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.1);
+            outline: none;
+            transform: translateY(-1px);
+        }
+        
+        .form-row input[type="text"]::placeholder {
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .help {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #1565c0;
+        }
+        
+        .submit-row input[type="submit"] {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .submit-row input[type="submit"]:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .category-info {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .main-header {
+            background: linear-gradient(135deg, #007cba 0%, #0056b3 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+        }
+        
+        .main-header.edit {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        
+        .form-container {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 30px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div style="max-width: 600px; margin: 0 auto;">
+        {% if add %}
+            <div class="main-header">
+                <h1 style="margin: 0; font-size: 24px;">🎯 Crear Nueva Categoría</h1>
+                <p style="margin: 10px 0 0 0; opacity: 0.9;">Selecciona una categoría de la lista para organizar los juegos.</p>
+            </div>
+        {% else %}
+            <div class="main-header edit">
+                <h1 style="margin: 0; font-size: 24px;">✏️ Editar Categoría</h1>
+                <p style="margin: 10px 0 0 0; opacity: 0.9;">Modificando: <strong>{{ original.get_nombre_display }}</strong></p>
+            </div>
+        {% endif %}
+        
+        <div class="form-container">
+            <!-- Aquí va el contenido original del formulario del admin -->
+            {{ block.super }}
+            
+            {% if not add and original %}
+                <div class="category-info">
+                    <h3>📊 Información de la Categoría</h3>
+                    <div style="font-size: 24px; margin: 15px 0;">
+                        {% with nombre_lower=original.nombre|lower %}
+                            {% if 'disparos' in nombre_lower %}🔫
+                            {% elif 'carrera' in nombre_lower %}🏎️
+                            {% elif 'puzzle' in nombre_lower %}🧩
+                            {% elif 'rpg' in nombre_lower or 'rol' in nombre_lower %}⚔️
+                            {% elif 'estrategia' in nombre_lower %}🧠
+                            {% elif 'deporte' in nombre_lower %}⚽
+                            {% elif 'aventura' in nombre_lower %}🗺️
+                            {% elif 'plataforma' in nombre_lower %}🏃‍♂️
+                            {% elif 'simulacion' in nombre_lower %}🎮
+                            {% elif 'mundo' in nombre_lower and 'abierto' in nombre_lower %}🌍
+                            {% elif 'terror' in nombre_lower %}👻
+                            {% elif 'coop' in nombre_lower or 'cooperativo' in nombre_lower %}�
+                            {% elif 'metroidvania' in nombre_lower %}🏰
+                            {% elif 'carta' in nombre_lower %}🃏
+                            {% elif 'accion' in nombre_lower %}�
+                            {% elif 'indie' in nombre_lower %}🌟
+                            {% elif 'multijugador' in nombre_lower %}👫
+                            {% elif 'supervivencia' in nombre_lower %}�️
+                            {% elif 'musica' in nombre_lower %}🎵
+                            {% elif 'baile' in nombre_lower %}💃
+                            {% else %}🎯
+                            {% endif %}
+                        {% endwith %} {{ original.get_nombre_display }}
+                    </div>
+                    
+                    <div style="background: #f8f9fa; border-radius: 6px; padding: 15px; margin-top: 15px;">
+                        <strong>🎮 Juegos asociados:</strong> {{ original.juego_set.count }}<br>
+                        <strong>📋 Código interno:</strong> <code>{{ original.nombre }}</code>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

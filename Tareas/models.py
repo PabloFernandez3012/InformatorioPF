@@ -7,36 +7,31 @@ class Categoria(models.Model):
     Modelo para las categorías de juegos.
     Cada categoría tiene un nombre único.
     """
-    CATEGORIAS_CHOICES = [
-        ('disparos', 'Disparos'),
-        ('carrera', 'Carrera'),
-        ('puzzles', 'Puzzles'),
-        ('rpg', 'RPG'),
-        ('estrategia', 'Estrategia'),
-        ('deportes', 'Deportes'),
-        ('aventura', 'Aventura'),
-        ('plataformas', 'Plataformas'),
-        ('simulacion', 'Simulación'),
-        ('mundo_abierto', 'Mundo Abierto'),
-        ('terror', 'Terror'),
-        ('coop', 'Cooperativo'),
-        ('metroidvania', 'Metroidvania'),
-        ('cartas', 'Cartas'),
+    # Categorías comunes como referencia (ya no se usan como choices)
+    CATEGORIAS_POPULARES = [
+        'Disparos', 'Carrera', 'Puzzles', 'RPG', 'Estrategia', 
+        'Deportes', 'Aventura', 'Plataformas', 'Simulación', 
+        'Mundo Abierto', 'Terror', 'Cooperativo', 'Metroidvania', 'Cartas'
     ]
     
     nombre = models.CharField(
-        max_length=20,
-        choices=CATEGORIAS_CHOICES,
+        max_length=50,  # Aumentamos el límite para permitir nombres más largos
         unique=True,
-        help_text='Selecciona una categoría para los juegos'
+        help_text='Escribe el nombre de la categoría (ej: Disparos, RPG, Aventura, etc.)'
     )
     
     def get_nombre_display(self):
-        """Retorna el nombre legible de la categoría"""
-        return dict(self.CATEGORIAS_CHOICES).get(self.nombre, self.nombre)
+        """Retorna el nombre de la categoría con formato título"""
+        return self.nombre.title()
     
     def __str__(self):
         return self.get_nombre_display()
+    
+    def save(self, *args, **kwargs):
+        """Guarda la categoría normalizando el nombre"""
+        # Normalizar el nombre: primera letra mayúscula, resto minúsculas
+        self.nombre = self.nombre.strip().title()
+        super().save(*args, **kwargs)
     
     class Meta:
         verbose_name_plural = "Categorías"

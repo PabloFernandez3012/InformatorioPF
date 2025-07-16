@@ -687,13 +687,43 @@ def configuracion_usuario(request):
 def acerca_de(request):
     """
     Vista que renderiza la página con información sobre el desarrollador
-    y el proyecto del Informatorio Chaco.
+    y el proyecto del Informatorio Chaco, incluyendo tecnologías actualizadas.
     """
     context = {
         'desarrollador': 'Pablo Javier Fernandez',
         'institucion': 'Informatorio Chaco',
         'proyecto': 'Plataforma de Reseñas de Videojuegos',
-        'año': '2025'
+        'año': '2025',
+        'tecnologias': {
+            'backend': [
+                {'nombre': 'Python 3.12', 'icono': '🐍', 'descripcion': 'Lenguaje principal del proyecto'},
+                {'nombre': 'Django 5.2.4', 'icono': '🌟', 'descripcion': 'Framework web para desarrollo rápido'},
+                {'nombre': 'SQLite', 'icono': '🗄️', 'descripcion': 'Base de datos relacional'},
+                {'nombre': 'Django Admin', 'icono': '⚙️', 'descripcion': 'Panel de administración personalizado'},
+            ],
+            'frontend': [
+                {'nombre': 'HTML5', 'icono': '📄', 'descripcion': 'Estructura semántica moderna'},
+                {'nombre': 'CSS3 Grid & Flexbox', 'icono': '🎨', 'descripcion': 'Diseño responsivo avanzado'},
+                {'nombre': 'JavaScript ES6+', 'icono': '⚡', 'descripcion': 'Interactividad del lado cliente'},
+                {'nombre': 'Template System Django', 'icono': '📋', 'descripcion': 'Renderizado dinámico de contenido'},
+            ],
+            'herramientas': [
+                {'nombre': 'Git & GitHub', 'icono': '📚', 'descripcion': 'Control de versiones distribuido'},
+                {'nombre': 'VS Code', 'icono': '💻', 'descripcion': 'Editor de código optimizado'},
+                {'nombre': 'Virtual Environment', 'icono': '📦', 'descripcion': 'Aislamiento de dependencias'},
+                {'nombre': 'Bash Scripting', 'icono': '🛠️', 'descripcion': 'Automatización de tareas'},
+            ],
+            'funcionalidades': [
+                {'nombre': 'Sistema de Autenticación', 'icono': '🔐', 'descripcion': 'Login, registro y gestión de usuarios'},
+                {'nombre': 'CRUD Completo', 'icono': '📝', 'descripcion': 'Crear, leer, actualizar y eliminar reseñas'},
+                {'nombre': 'Búsqueda Avanzada', 'icono': '🔍', 'descripcion': 'Filtros por categoría, año, estudio'},
+                {'nombre': 'RSS Feed Integration', 'icono': '📰', 'descripcion': 'Noticias actualizadas automáticamente'},
+                {'nombre': 'Carga de Imágenes', 'icono': '🖼️', 'descripcion': 'Upload y gestión de media files'},
+                {'nombre': 'Sistema de Paginación', 'icono': '📄', 'descripcion': 'Navegación optimizada de contenido'},
+                {'nombre': 'Cache System', 'icono': '⚡', 'descripcion': 'Optimización de rendimiento'},
+                {'nombre': 'Formularios Validados', 'icono': '✅', 'descripcion': 'Validación robusta de datos'},
+            ]
+        }
     }
     return render(request, 'acerca_de.html', context)
 

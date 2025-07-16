@@ -70,14 +70,27 @@ Extiende el template base para mantener la navegación y estructura.
     <!-- Card: Tecnologías -->
     <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); border-left: 5px solid #007bff;">
         <div style="font-size: 2.5em; margin-bottom: 15px; text-align: center;">⚙️</div>
-        <h3 style="color: #007bff; margin-bottom: 15px; text-align: center;">Tecnologías</h3>
-        <ul style="color: #6c757d; line-height: 1.8; list-style: none; padding: 0;">
-            <li style="margin-bottom: 8px;">🐍 <strong>Python & Django</strong> - Backend</li>
-            <li style="margin-bottom: 8px;">🎨 <strong>HTML, CSS, JavaScript</strong> - Frontend</li>
-            <li style="margin-bottom: 8px;">🗄️ <strong>SQLite</strong> - Base de datos</li>
-            <li style="margin-bottom: 8px;">� <strong>CSS Grid & Flexbox</strong> - Diseño responsivo</li>
-            <li>🔗 <strong>RSS Feeds</strong> - Noticias gaming</li>
-        </ul>
+        <h3 style="color: #007bff; margin-bottom: 15px; text-align: center;">Stack Tecnológico</h3>
+        <div style="color: #6c757d; line-height: 1.8;">
+            <div style="margin-bottom: 15px;">
+                <strong style="color: #28a745;">🚀 Backend:</strong><br>
+                {% for tech in tecnologias.backend %}
+                    <span style="display: inline-block; margin: 2px 5px 2px 0;">{{ tech.icono }} {{ tech.nombre }}</span>{% if not forloop.last %} •{% endif %}
+                {% endfor %}
+            </div>
+            <div style="margin-bottom: 15px;">
+                <strong style="color: #dc3545;">🎨 Frontend:</strong><br>
+                {% for tech in tecnologias.frontend %}
+                    <span style="display: inline-block; margin: 2px 5px 2px 0;">{{ tech.icono }} {{ tech.nombre }}</span>{% if not forloop.last %} •{% endif %}
+                {% endfor %}
+            </div>
+            <div>
+                <strong style="color: #6f42c1;">🛠️ Herramientas:</strong><br>
+                {% for tool in tecnologias.herramientas %}
+                    <span style="display: inline-block; margin: 2px 5px 2px 0;">{{ tool.icono }} {{ tool.nombre }}</span>{% if not forloop.last %} •{% endif %}
+                {% endfor %}
+            </div>
+        </div>
     </div>
 
 </div>
@@ -105,33 +118,17 @@ Extiende el template base para mantener la navegación y estructura.
 <!-- ===== CARACTERÍSTICAS DEL PROYECTO ===== -->
 <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); margin-bottom: 30px;">
     <h3 style="color: #343a40; text-align: center; margin-bottom: 25px; font-size: 1.8em;">
-        🌟 Características Principales
+        🌟 Funcionalidades Desarrolladas
     </h3>
     
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-        <div style="text-align: center; padding: 20px;">
-            <div style="font-size: 2em; margin-bottom: 10px;">📝</div>
-            <h4 style="color: #495057; margin-bottom: 8px;">Sistema de Reseñas</h4>
-            <p style="color: #6c757d; font-size: 0.9em;">Usuarios pueden crear y compartir reseñas detalladas</p>
-        </div>
-        
-        <div style="text-align: center; padding: 20px;">
-            <div style="font-size: 2em; margin-bottom: 10px;">🔍</div>
-            <h4 style="color: #495057; margin-bottom: 8px;">Búsqueda Avanzada</h4>
-            <p style="color: #6c757d; font-size: 0.9em;">Filtros por género, año, estudio y más</p>
-        </div>
-        
-        <div style="text-align: center; padding: 20px;">
-            <div style="font-size: 2em; margin-bottom: 10px;">📰</div>
-            <h4 style="color: #495057; margin-bottom: 8px;">Noticias Gaming</h4>
-            <p style="color: #6c757d; font-size: 0.9em;">Últimas noticias del mundo de los videojuegos</p>
-        </div>
-        
-        <div style="text-align: center; padding: 20px;">
-            <div style="font-size: 2em; margin-bottom: 10px;">👥</div>
-            <h4 style="color: #495057; margin-bottom: 8px;">Gestión de Usuarios</h4>
-            <p style="color: #6c757d; font-size: 0.9em;">Sistema completo de autenticación y perfiles</p>
-        </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+        {% for func in tecnologias.funcionalidades %}
+            <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #007bff;">
+                <div style="font-size: 2em; margin-bottom: 10px;">{{ func.icono }}</div>
+                <h4 style="color: #495057; margin-bottom: 8px; font-size: 1em;">{{ func.nombre }}</h4>
+                <p style="color: #6c757d; font-size: 0.85em; line-height: 1.4;">{{ func.descripcion }}</p>
+            </div>
+        {% endfor %}
     </div>
 </div>
 

@@ -1,0 +1,231 @@
+/* 🎨 CSS PERSONALIZADO PARA EL ADMIN DE DJANGO - CATEGORÍAS MEJORADAS */
+/* ================================================================= */
+
+/* Mejoras generales para el admin */
+.admin-wrapper {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Estilos para las categorías en la lista */
+.field-icono_categoria {
+    text-align: center;
+    width: 50px;
+}
+
+.field-nombre_interno code {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.field-cantidad_juegos {
+    text-align: center;
+    min-width: 80px;
+}
+
+.field-acciones_rapidas {
+    text-align: center;
+    min-width: 100px;
+}
+
+/* Botones de acción mejorados */
+.button {
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* Estilos para las categorías con íconos en JuegoAdmin */
+.field-categorias_con_iconos span {
+    display: inline-block;
+    margin-bottom: 2px;
+    font-weight: 500;
+    border: 1px solid #e3f2fd;
+}
+
+.field-categorias_con_iconos span:hover {
+    background: #bbdefb !important;
+    transform: scale(1.05);
+    transition: all 0.2s ease;
+}
+
+/* Estilos para el promedio con color */
+.field-promedio_con_color {
+    text-align: center;
+    min-width: 120px;
+}
+
+/* Mejoras en el formulario de creación/edición */
+.form-row {
+    margin-bottom: 15px;
+}
+
+.form-row .help {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #495057;
+}
+
+/* Fieldsets mejorados */
+fieldset h2 {
+    background: linear-gradient(135deg, #007cba 0%, #0056b3 100%);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 6px 6px 0 0;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+fieldset {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+fieldset .description {
+    background: #e3f2fd;
+    border: 1px solid #90caf9;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 10px 0;
+    font-size: 12px;
+    color: #1565c0;
+}
+
+/* Mejoras en el filter_horizontal para categorías */
+.selector {
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.selector h2 {
+    background: #f8f9fa;
+    color: #495057;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.selector-available h2 {
+    background: #fff3cd;
+    color: #856404;
+    border-color: #ffeaa7;
+}
+
+.selector-chosen h2 {
+    background: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .field-categorias_con_iconos span {
+        display: block;
+        margin-bottom: 4px;
+        margin-right: 0;
+    }
+    
+    .field-acciones_rapidas .button {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+}
+
+/* Animaciones suaves */
+.changelist-results tbody tr:hover {
+    background-color: #f8f9fa;
+    transition: background-color 0.2s ease;
+}
+
+/* Mejoras en los mensajes del admin */
+.messagelist .success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border-color: #28a745;
+    color: #155724;
+}
+
+.messagelist .warning {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    border-color: #ffc107;
+    color: #856404;
+}
+
+/* Iconos en los enlaces de navegación */
+.breadcrumbs a::before {
+    content: "🏠 ";
+    margin-right: 4px;
+}
+
+/* Mejoras en la paginación */
+.paginator {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 10px;
+    margin: 15px 0;
+}
+
+.paginator a, .paginator .this-page {
+    border-radius: 4px;
+    padding: 6px 10px;
+    margin: 0 2px;
+    transition: all 0.2s ease;
+}
+
+.paginator a:hover {
+    background: #007cba;
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Estilos para checkboxes y controles */
+input[type="checkbox"] {
+    transform: scale(1.2);
+    margin-right: 8px;
+}
+
+/* Mejoras en los tooltips */
+[title] {
+    position: relative;
+}
+
+/* Estilos específicos para el modelo Categoria */
+.model-categoria .changelist-results th {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    color: #1565c0;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
+.model-categoria .add-row {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+}
+
+.model-categoria .add-row:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+}
