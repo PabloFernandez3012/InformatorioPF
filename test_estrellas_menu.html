@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Estrellas - Menú de Juegos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .star-gold {
+            color: #fbbf24 !important;
+            text-shadow: 0 0 4px rgba(251, 191, 36, 0.8) !important;
+            filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.8)) !important;
+            font-weight: bold !important;
+        }
+        
+        .star-gray {
+            color: #9ca3af !important;
+            opacity: 0.6 !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8 text-center">Prueba de Estrellas - Menú de Juegos</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Juego 1: Battlefield 1942 (2.5 estrellas) -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Battlefield 1942</h3>
+                    <p class="text-gray-600 mb-4">EA</p>
+                    
+                    <!-- Footer with date and rating -->
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-500">2025</span>
+                        <div class="flex items-center space-x-1">
+                            <!-- 2.5 estrellas (promedio 2.5 = 2 estrellas llenas) -->
+                            <div class="flex items-center">
+                                <span class="star-gold" style="color: #fbbf24; text-shadow: 0 0 4px rgba(251, 191, 36, 0.8); filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.8)); font-size: 16px; font-weight: bold;">★</span>
+                                <span class="star-gold" style="color: #fbbf24; text-shadow: 0 0 4px rgba(251, 191, 36, 0.8); filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.8)); font-size: 16px; font-weight: bold;">★</span>
+                                <span class="star-gray" style="color: #9ca3af; font-size: 16px; opacity: 0.6;">☆</span>
+                                <span class="star-gray" style="color: #9ca3af; font-size: 16px; opacity: 0.6;">☆</span>
+                                <span class="star-gray" style="color: #9ca3af; font-size: 16px; opacity: 0.6;">☆</span>
+                            </div>
+                            <span class="text-gray-600 ml-1">2.5</span>
+                            <span class="text-gray-400 text-xs">(2)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Juego 2: Black Myth: Wukong (5.0 estrellas) -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Black Myth: Wukong</h3>
+                    <p class="text-gray-600 mb-4">Estudio Chino</p>
+                    
+                    <!-- Footer with date and rating -->
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-500">2025</span>
+                        <div class="flex items-center space-x-1">
+                            <!-- 5.0 estrellas (todas llenas) -->
+                            <div class="flex items-center">
+                                <span class="star-gold" style="color: #fbbf24; text-shadow: 0 0 4px rgba(251, 191, 36, 0.8); filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.8)); font-size: 16px; font-weight: bold;">★</span>
+                                <span class="star-gold" style="color: #fbbf24; text-shadow: 0 0 4px rgba(251, 191, 36, 0.8); filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.8)); font-size: 16px; font-weight: bold;">★</span>
+                                <span class="star-gold" style="color: #fbbf24; text-shadow: 0 0 4px rgba(251, 191, 36, 0.8); filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.8)); font-size: 16px; font-weight: bold;">★</span>
+                                <span class="star-gold" style="color: #fbbf24; text-shadow: 0 0 4px rgba(251, 191, 36, 0.8); filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.8)); font-size: 16px; font-weight: bold;">★</span>
+                                <span class="star-gold" style="color: #fbbf24; text-shadow: 0 0 4px rgba(251, 191, 36, 0.8); filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.8)); font-size: 16px; font-weight: bold;">★</span>
+                            </div>
+                            <span class="text-gray-600 ml-1">5.0</span>
+                            <span class="text-gray-400 text-xs">(1)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Juego 3: UmaMusume (5.0 estrellas) -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">UmaMusume -Pretty Derby</h3>
+                    <p class="text-gray-600 mb-4">CyGames</p>
+                    
+                    <!-- Footer with date and rating -->
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-500">2025</span>
+                        <div class="flex items-center space-x-1">
+                            <!-- 5.0 estrellas (todas llenas) -->
+                            <div class="flex items-center">
+                                <span class="star-gold" style="color: #fbbf24; text-shadow: 0 0 4px rgba(251, 191, 36, 0.8); filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.8)); font-size: 16px; font-weight: bold;">★</span>
+                                <span class="star-gold" style="color: #fbbf24; text-shadow: 0 0 4px rgba(251, 191, 36, 0.8); filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.8)); font-size: 16px; font-weight: bold;">★</span>
+                                <span class="star-gold" style="color: #fbbf24; text-shadow: 0 0 4px rgba(251, 191, 36, 0.8); filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.8)); font-size: 16px; font-weight: bold;">★</span>
+                                <span class="star-gold" style="color: #fbbf24; text-shadow: 0 0 4px rgba(251, 191, 36, 0.8); filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.8)); font-size: 16px; font-weight: bold;">★</span>
+                                <span class="star-gold" style="color: #fbbf24; text-shadow: 0 0 4px rgba(251, 191, 36, 0.8); filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.8)); font-size: 16px; font-weight: bold;">★</span>
+                            </div>
+                            <span class="text-gray-600 ml-1">5.0</span>
+                            <span class="text-gray-400 text-xs">(1)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Juego 4: Sin reseñas -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Juego Sin Reseñas</h3>
+                    <p class="text-gray-600 mb-4">Estudio Desconocido</p>
+                    
+                    <!-- Footer with date and rating -->
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-500">2025</span>
+                        <div class="flex items-center space-x-1">
+                            <span class="text-gray-400 text-sm">Sin reseñas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 p-6 bg-blue-50 rounded-lg">
+            <h3 class="text-lg font-semibold text-blue-800 mb-2">Estado de las estrellas:</h3>
+            <div class="text-blue-700 space-y-2">
+                <p><strong>Battlefield 1942:</strong> Promedio 2.5 → 2 estrellas doradas, 3 grises</p>
+                <p><strong>Black Myth: Wukong:</strong> Promedio 5.0 → 5 estrellas doradas</p>
+                <p><strong>UmaMusume:</strong> Promedio 5.0 → 5 estrellas doradas</p>
+                <p><strong>Juego Sin Reseñas:</strong> Sin promedio → Texto "Sin reseñas"</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

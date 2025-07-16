@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Estrellas con Colores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .star-filled {
+            color: #eab308;
+            text-shadow: 0 0 2px rgba(0,0,0,0.3);
+        }
+        .star-empty {
+            color: #d1d5db;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+        <h1 class="text-3xl font-bold mb-8 text-center">Prueba de Estrellas con Colores</h1>
+        
+        <div class="space-y-6">
+            <div class="bg-gray-50 p-4 rounded">
+                <h2 class="text-xl font-semibold mb-4">Estrellas usando Unicode ★ y ☆</h2>
+                
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-4">
+                        <span class="w-20">1 estrella:</span>
+                        <div class="flex text-lg">
+                            <span style="color: #eab308; text-shadow: 0 0 2px rgba(0,0,0,0.3);">★</span>
+                            <span style="color: #d1d5db;">☆☆☆☆</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <span class="w-20">2 estrellas:</span>
+                        <div class="flex text-lg">
+                            <span style="color: #eab308; text-shadow: 0 0 2px rgba(0,0,0,0.3);">★★</span>
+                            <span style="color: #d1d5db;">☆☆☆</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <span class="w-20">3 estrellas:</span>
+                        <div class="flex text-lg">
+                            <span style="color: #eab308; text-shadow: 0 0 2px rgba(0,0,0,0.3);">★★★</span>
+                            <span style="color: #d1d5db;">☆☆</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <span class="w-20">4 estrellas:</span>
+                        <div class="flex text-lg">
+                            <span style="color: #eab308; text-shadow: 0 0 2px rgba(0,0,0,0.3);">★★★★</span>
+                            <span style="color: #d1d5db;">☆</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <span class="w-20">5 estrellas:</span>
+                        <div class="flex text-lg">
+                            <span style="color: #eab308; text-shadow: 0 0 2px rgba(0,0,0,0.3);">★★★★★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 p-4 rounded">
+                <h2 class="text-xl font-semibold mb-4">Estrellas usando emojis ⭐</h2>
+                
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-4">
+                        <span class="w-20">1 estrella:</span>
+                        <div class="flex text-lg">
+                            <span>⭐</span>
+                            <span style="color: #d1d5db;">☆☆☆☆</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <span class="w-20">3 estrellas:</span>
+                        <div class="flex text-lg">
+                            <span>⭐⭐⭐</span>
+                            <span style="color: #d1d5db;">☆☆</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <span class="w-20">5 estrellas:</span>
+                        <div class="flex text-lg">
+                            <span>⭐⭐⭐⭐⭐</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 p-4 rounded">
+                <h2 class="text-xl font-semibold mb-4">Estrellas con clases CSS</h2>
+                
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-4">
+                        <span class="w-20">1 estrella:</span>
+                        <div class="flex text-lg">
+                            <span class="star-filled">★</span>
+                            <span class="star-empty">☆☆☆☆</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <span class="w-20">3 estrellas:</span>
+                        <div class="flex text-lg">
+                            <span class="star-filled">★★★</span>
+                            <span class="star-empty">☆☆</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 p-4 bg-blue-50 rounded">
+            <h3 class="font-semibold text-blue-800">Notas:</h3>
+            <ul class="text-blue-700 mt-2 space-y-1">
+                <li>• Las estrellas llenas (★) deberían verse en color dorado (#eab308)</li>
+                <li>• Las estrellas vacías (☆) deberían verse en color gris (#d1d5db)</li>
+                <li>• Si no ves colores, puede ser un problema del navegador o del sistema</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

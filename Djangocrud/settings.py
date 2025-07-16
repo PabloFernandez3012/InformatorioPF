@@ -117,7 +117,47 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# =============================================================================
+# CONFIGURACIÓN DE ARCHIVOS ESTÁTICOS
+# =============================================================================
+# Directorios donde Django buscará archivos estáticos
+STATICFILES_DIRS = [
+    BASE_DIR / "Tareas" / "static",  # Carpeta static de la app Tareas
+]
+
+# Directorio donde se recopilarán todos los archivos estáticos en producción
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Configuración de archivos multimedia subidos por usuarios
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / "media"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# =============================================================================
+# CONFIGURACIÓN DE CACHÉ PARA MEJORAR RENDIMIENTO
+# =============================================================================
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+        'TIMEOUT': 300,  # 5 minutos por defecto
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000,  # Máximo 1000 entradas en caché
+            'CULL_FREQUENCY': 3,  # Eliminar 1/3 de las entradas cuando se alcance MAX_ENTRIES
+        }
+    }
+}
+
+# Configuración de caché para templates (opcional pero recomendado para producción)
+# TEMPLATE_LOADERS = [
+#     ['django.template.loaders.cached.Loader', [
+#         'django.template.loaders.filesystem.Loader',
+#         'django.template.loaders.app_directories.Loader',
+#     ]],
+# ]
+
+

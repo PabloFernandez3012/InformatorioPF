@@ -1,5 +1,6 @@
 <!-- 
-=============================================================================
+================================================    <!-- Enlace al archivo CSS estático (para estilos adicionales) -->
+    <link rel="stylesheet" type="text/css" href="{% static 'Tareas/css/styles.css' %}">===========================
 TEMPLATE BASE - ESTRUCTURA PRINCIPAL DE TODA LA APLICACIÓN
 =============================================================================
 Este template define la estructura HTML común que comparten todas las páginas.
@@ -38,12 +39,10 @@ Incluye la navegación, estilos básicos y el contenido dinámico.
     <style>
         .star-filled {
             color: #eab308 !important;
-            text-shadow: 0 0 3px rgba(0,0,0,0.6) !important;
-            font-weight: bold !important;
+            text-shadow: 0 0 2px rgba(0,0,0,0.3);
         }
         .star-empty {
             color: #d1d5db !important;
-            font-weight: normal !important;
         }
         .rating-stars {
             display: inline-flex;
@@ -53,23 +52,10 @@ Incluye la navegación, estilos básicos y el contenido dinámico.
             font-size: inherit;
             line-height: 1;
         }
-        
-        /* Estilos específicos para estrellas doradas */
-        .star-gold {
-            color: #fbbf24 !important;
-            text-shadow: 0 0 4px rgba(251, 191, 36, 0.7) !important;
-            filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.8)) !important;
-        }
-        
-        /* Estilos específicos para estrellas grises */
-        .star-gray {
-            color: #9ca3af !important;
-            opacity: 0.6;
-        }
     </style>
     
     <!-- Enlace al archivo CSS estático (para estilos adicionales) -->
-    <link rel="stylesheet" type="text/css" href="{% static 'Tareas/css/styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'Tareas/css/styles.css' %}">>
     
     <!-- 
     =============================================================================
@@ -178,83 +164,12 @@ Incluye la navegación, estilos básicos y el contenido dinámico.
         
         /* Estilos especiales para botones de autenticación */
         .auth-btn {
-            border: 2px solid #007bff !important;
-            background: linear-gradient(135deg, #007bff, #0056b3) !important;
-            color: white !important;
-            font-weight: bold !important;
-            text-transform: uppercase !important;
-            letter-spacing: 0.5px !important;
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3) !important;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            position: relative !important;
-            overflow: hidden !important;
+            border: 1px solid #6c757d;
         }
         
         .auth-btn:hover {
-            background: linear-gradient(135deg, #0056b3, #004085) !important;
-            border-color: #0056b3 !important;
-            transform: translateY(-2px) scale(1.05) !important;
-            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.5) !important;
-            color: white !important;
-        }
-        
-        .auth-btn:active {
-            transform: translateY(0) scale(1.02) !important;
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4) !important;
-        }
-        
-        /* Efecto de brillo animado para destacar más */
-        .auth-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .auth-btn:hover::before {
-            left: 100%;
-        }
-        
-        /* Estilos específicos para el botón de registro */
-        .register-btn {
-            background: linear-gradient(135deg, #28a745, #20c997) !important;
-            border-color: #28a745 !important;
-            animation: glow-green 2s ease-in-out infinite alternate;
-        }
-        
-        .register-btn:hover {
-            background: linear-gradient(135deg, #20c997, #17a2b8) !important;
-            border-color: #20c997 !important;
-            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.5) !important;
-        }
-        
-        /* Estilos específicos para el botón de login */
-        .login-btn {
-            background: linear-gradient(135deg, #007bff, #6f42c1) !important;
-            border-color: #007bff !important;
-            animation: glow-blue 2s ease-in-out infinite alternate;
-            position: relative;
-        }
-        
-        .login-btn:hover {
-            background: linear-gradient(135deg, #6f42c1, #e83e8c) !important;
-            border-color: #6f42c1 !important;
-            box-shadow: 0 8px 25px rgba(111, 66, 193, 0.5) !important;
-        }
-        
-        /* Animaciones de resplandor */
-        @keyframes glow-green {
-            from { box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); }
-            to { box-shadow: 0 4px 20px rgba(40, 167, 69, 0.6), 0 0 10px rgba(40, 167, 69, 0.4); }
-        }
-        
-        @keyframes glow-blue {
-            from { box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); }
-            to { box-shadow: 0 4px 20px rgba(111, 66, 193, 0.6), 0 0 10px rgba(111, 66, 193, 0.4); }
+            background-color: #007bff !important;
+            border-color: #007bff;
         }
         
         /* Responsive: En pantallas pequeñas, cambiar a vertical */
@@ -359,15 +274,15 @@ Incluye la navegación, estilos básicos y el contenido dinámico.
                     <li>
                         <!-- Enlace para registrarse como nuevo usuario -->
                         <a href="{% url 'signup' %}" 
-                           class="auth-btn register-btn {% if request.resolver_match.url_name == 'signup' %}active{% endif %}">
-                            ✨ Registrarse
+                           class="auth-btn {% if request.resolver_match.url_name == 'signup' %}active{% endif %}">
+                            📝 Registrarse
                         </a>
                     </li>
                     <li>
                         <!-- Enlace para iniciar sesión -->
                         <a href="{% url 'entrar' %}" 
-                           class="auth-btn login-btn {% if request.resolver_match.url_name == 'entrar' %}active{% endif %}">
-                            � Iniciar Sesión
+                           class="auth-btn {% if request.resolver_match.url_name == 'entrar' %}active{% endif %}">
+                            🔑 Entrar
                         </a>
                     </li>
                 {% endif %}

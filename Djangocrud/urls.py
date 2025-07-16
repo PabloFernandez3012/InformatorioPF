@@ -17,6 +17,8 @@ Estructura básica: path('ruta/', views.nombre_vista, name='nombre_url')
 from django.contrib import admin  # Para acceder al panel de administración
 from django.urls import path  # Para definir las rutas URL
 from Tareas import views  # Importar todas las vistas de nuestra app Tareas
+from django.conf import settings
+from django.conf.urls.static import static
 
 # =============================================================================
 # LISTA DE PATRONES DE URL
@@ -45,6 +47,11 @@ urlpatterns = [
     path('tareas/', views.tareas, name='tareas'),  # URL: /tareas/ - Lista de todos los juegos
     
     # =========================================================================
+    # INFORMACIÓN DEL PROYECTO
+    # =========================================================================
+    path('acerca-de/', views.acerca_de, name='acerca_de'),  # URL: /acerca-de/ - Información del desarrollador
+    
+    # =========================================================================
     # GESTIÓN DE RESEÑAS (REQUIEREN PARÁMETROS)
     # =========================================================================
     # URL: /juego/1/ - Detalles del juego con ID=1
@@ -52,6 +59,9 @@ urlpatterns = [
     
     # URL: /juego/1/resena/ - Crear reseña para el juego con ID=1
     path('juego/<int:juego_id>/resena/', views.crear_resena, name='crear_resena'),
+    
+    # URL: /resena/1/editar/ - Editar reseña con ID=1
+    path('resena/<int:resena_id>/editar/', views.editar_resena, name='editar_resena'),
     
     # =========================================================================
     # PERFIL Y CONFIGURACIÓN DE USUARIO
@@ -61,15 +71,9 @@ urlpatterns = [
     
     # URL: /configuracion/ - Configuración del usuario (cambiar contraseña)
     path('configuracion/', views.configuracion_usuario, name='configuracion'),
+    
 ]
 
-# =============================================================================
-# EXPLICACIÓN DE PARÁMETROS EN URLs:
-# =============================================================================
-# <int:juego_id> significa:
-# - int: El parámetro debe ser un número entero
-# - juego_id: Nombre de la variable que recibe la vista
-# 
-# Ejemplo: Si el usuario va a /juego/5/
-# - Django llama a views.detalle_juego(request, juego_id=5)
-# =============================================================================
+# Servir archivos media en desarrollo
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

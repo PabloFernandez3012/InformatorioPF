@@ -1,70 +1,287 @@
-<!-- 
-=============================================================================
-TEMPLATE DE INICIO DE SESIÓN
-=============================================================================
-Formulario para que usuarios existentes inicien sesión en la aplicación.
--->
+{% extends 'base.html' %}
+{% load static %}
 
-{% extends 'base.html' %} <!-- Hereda la estructura de base.html -->
+{% block title %}Iniciar Sesión - Proyecto Django{% endblock %}
 
-<!-- Título específico de esta página -->
-{% block title %}Entrar - Proyecto Django{% endblock %}
-
-<!-- Breadcrumb específico -->
 {% block breadcrumb %}
     🏠 <a href="{% url 'home' %}" style="color: #6c757d; text-decoration: none;">Inicio</a> 
     <span style="margin: 0 8px;">›</span> 
-    <strong style="color: #007bff;">🔑 Entrar</strong>
+    <strong style="color: #007bff;">🔑 Iniciar Sesión</strong>
 {% endblock %}
 
 {% block content %}
-
-<!-- ===== TÍTULO DE LA PÁGINA ===== -->
-<h1>Iniciar Sesión</h1>
-
-<!-- 
-=============================================================================
-MOSTRAR ERRORES DE AUTENTICACIÓN
-=============================================================================
-Si las credenciales son incorrectas, la vista envía una variable 'error'
--->
-{% if error %}
-    <!-- Mensaje de error con estilo rojo -->
-    <p style="color: red;">{{ error }}</p>
-{% endif %}
-
-<!-- 
-=============================================================================
-FORMULARIO DE INICIO DE SESIÓN
-=============================================================================
-Formulario simple con usuario y contraseña
--->
-<form method="post">
-    <!-- ===== TOKEN DE SEGURIDAD CSRF ===== -->
-    {% csrf_token %}
+<style>
+    /* Estilos específicos para la página de login */
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 70vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        margin: 20px 0;
+    }
     
-    <!-- ===== CAMPO DE NOMBRE DE USUARIO ===== -->
-    <div>
-        <label for="username">Usuario:</label>
-        <!-- name="username" es lo que recibe request.POST['username'] en la vista -->
-        <input type="text" name="username" id="username" required>
+    .login-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 450px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .login-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+        background-size: 400% 400%;
+        animation: gradient 3s ease infinite;
+    }
+    
+    @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    .login-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 10px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .login-subtitle {
+        text-align: center;
+        color: #6c757d;
+        margin-bottom: 30px;
+        font-size: 1.1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+        position: relative;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .form-input {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+        box-sizing: border-box;
+    }
+    
+    .form-input:focus {
+        outline: none;
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    .login-button {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .login-button:hover {
+        background: linear-gradient(135deg, #764ba2, #667eea);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+    }
+    
+    .login-button:active {
+        transform: translateY(-1px);
+    }
+    
+    .login-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+    
+    .login-button:hover::before {
+        left: 100%;
+    }
+    
+    .error-message {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 500;
+        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        animation: shake 0.5s ease-in-out;
+    }
+    
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+    
+    .signup-link {
+        text-align: center;
+        margin-top: 25px;
+        padding: 20px;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 10px;
+        border: 2px dashed #667eea;
+    }
+    
+    .signup-link p {
+        margin: 0;
+        color: #6c757d;
+        font-size: 1rem;
+    }
+    
+    .signup-link a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+    
+    .signup-link a:hover {
+        color: #764ba2;
+        text-decoration: underline;
+        text-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+    }
+    
+    .icon-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .login-icon {
+        font-size: 4rem;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .login-card {
+            margin: 10px;
+            padding: 25px;
+        }
+        
+        .login-title {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<div class="login-container">
+    <div class="login-card">
+        <!-- Icono animado -->
+        <div class="icon-container">
+            <div class="login-icon">🔐</div>
+        </div>
+        
+        <!-- Título principal -->
+        <h1 class="login-title">Iniciar Sesión</h1>
+        <p class="login-subtitle">Accede a tu cuenta para continuar</p>
+        
+        <!-- Mostrar errores -->
+        {% if error %}
+            <div class="error-message">
+                ⚠️ {{ error }}
+            </div>
+        {% endif %}
+        
+        <!-- Formulario de login -->
+        <form method="post">
+            {% csrf_token %}
+            
+            <!-- Campo Usuario -->
+            <div class="form-group">
+                <label for="username" class="form-label">👤 Usuario</label>
+                <input type="text" 
+                       name="username" 
+                       id="username" 
+                       class="form-input"
+                       placeholder="Ingresa tu nombre de usuario"
+                       required>
+            </div>
+            
+            <!-- Campo Contraseña -->
+            <div class="form-group">
+                <label for="password" class="form-label">🔒 Contraseña</label>
+                <input type="password" 
+                       name="password" 
+                       id="password" 
+                       class="form-input"
+                       placeholder="Ingresa tu contraseña"
+                       required>
+            </div>
+            
+            <!-- Botón de envío -->
+            <button type="submit" class="login-button">
+                🚀 Iniciar Sesión
+            </button>
+        </form>
+        
+        <!-- Enlace de registro -->
+        <div class="signup-link">
+            <p>¿No tienes cuenta? <a href="{% url 'signup' %}">🆕 Regístrate aquí</a></p>
+        </div>
     </div>
-    
-    <!-- ===== CAMPO DE CONTRASEÑA ===== -->
-    <div>
-        <label for="password">Contraseña:</label>
-        <!-- name="password" es lo que recibe request.POST['password'] en la vista -->
-        <!-- type="password" oculta el texto mientras se escribe -->
-        <input type="password" name="password" id="password" required>
-    </div>
-    
-    <!-- ===== BOTÓN DE ENVÍO ===== -->
-    <!-- type="submit" envía el formulario por POST a la misma URL -->
-    <button type="submit">Entrar</button>
-</form>
-
-<!-- ===== ENLACE PARA REGISTRO ===== -->
-<!-- Si no tienen cuenta, pueden ir a registrarse -->
-<p>¿No tienes cuenta? <a href="{% url 'signup' %}">Regístrate aquí</a></p>
+</div>
 
 {% endblock %}

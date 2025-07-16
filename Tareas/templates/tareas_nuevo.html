@@ -198,23 +198,14 @@
                         <!-- Footer with date and rating -->
                         <div class="flex items-center justify-between text-sm">
                             <span class="text-gray-500">{{ juego.fecha_publicacion|date:"Y" }}</span>
-                            <div class="flex items-center space-x-1">                        {% if juego.promedio_puntuacion > 0 %}
-                            <div class="flex items-center">
-                                {% with juego.promedio_puntuacion|floatformat:0 as estrellas_llenas %}
-                                    {% for i in "12345"|make_list %}
-                                        {% if forloop.counter|add:"0" <= estrellas_llenas|add:"0" %}
-                                            <span style="color: #fbbf24 !important; text-shadow: 0 0 4px rgba(251, 191, 36, 0.8) !important; filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.8)) !important; font-size: 16px !important; font-weight: bold !important; display: inline-block !important;">★</span>
-                                        {% else %}
-                                            <span style="color: #9ca3af !important; font-size: 16px !important; opacity: 0.6 !important; display: inline-block !important;">☆</span>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endwith %}
-                            </div>
-                            <span class="text-gray-600 ml-1">{{ juego.promedio_puntuacion|floatformat:1 }}</span>
-                            <span class="text-gray-400 text-xs">({{ juego.total_resenas }})</span>
-                        {% else %}
-                            <span class="text-gray-400 text-sm">Sin reseñas</span>
-                        {% endif %}
+                            <div class="flex items-center space-x-1">
+                                {% if juego.promedio_puntuacion > 0 %}
+                                    <span class="text-yellow-500">⭐</span>
+                                    <span class="text-gray-600">{{ juego.promedio_puntuacion|floatformat:1 }}</span>
+                                    <span class="text-gray-400">({{ juego.total_resenas }})</span>
+                                {% else %}
+                                    <span class="text-gray-400">Sin reseñas</span>
+                                {% endif %}
                             </div>
                         </div>
 

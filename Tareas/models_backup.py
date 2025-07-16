@@ -46,12 +46,6 @@ class Juego(models.Model):
     fecha_publicacion = models.DateField(default=date.today)
     estudio = models.CharField(max_length=150, default='Desconocido')
     descripcion = models.TextField(default='Sin descripción disponible')
-    imagen = models.ImageField(
-        upload_to='juegos/', 
-        blank=True, 
-        null=True,
-        help_text='Imagen del juego (opcional)'
-    )
     creado = models.DateTimeField(auto_now_add=True)
     importante = models.BooleanField(default=False)
     
@@ -62,17 +56,6 @@ class Juego(models.Model):
         """Retorna las categorías como texto separado por comas para el admin"""
         return ", ".join([categoria.get_nombre_display() for categoria in self.categorias.all()])
     categorias_texto.short_description = 'Categorías'
-    
-    def promedio_puntuacion(self):
-        """Calcula el promedio de puntuaciones de todas las reseñas"""
-        resenas = self.resenas.all()
-        if resenas:
-            return sum(resena.puntuacion for resena in resenas) / len(resenas)
-        return 0
-    
-    def total_resenas(self):
-        """Retorna el número total de reseñas"""
-        return self.resenas.count()
     
     def __str__(self):
         return f"{self.nombre} ({self.estudio})"
@@ -93,7 +76,7 @@ class Resena(models.Model):
         (5, '⭐⭐⭐⭐⭐'),
     ]
     
-    juego = models.ForeignKey(Juego, on_delete=models.CASCADE, related_name='resenas')
+    juego = models.ForeignKey(Juego, on_delete=models.CASCADE)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     comentario = models.TextField()
     puntuacion = models.IntegerField(choices=PUNTUACIONES)

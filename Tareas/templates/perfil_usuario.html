@@ -103,9 +103,9 @@ RESEÑAS DEL USUARIO
                         <div>
                             {% for i in "12345" %}
                                 {% if forloop.counter <= reseña.puntuacion %}
-                                    ⭐
+                                    <span style="color: #eab308; text-shadow: 0 0 1px rgba(0,0,0,0.3);">★</span>
                                 {% else %}
-                                    ☆
+                                    <span style="color: #d1d5db;">☆</span>
                                 {% endif %}
                             {% endfor %}
                             <span style="color: #666; font-size: 0.9em;">({{ reseña.puntuacion }}/5)</span>
@@ -125,12 +125,18 @@ RESEÑAS DEL USUARIO
                     </p>
                 </div>
                 
-                <!-- Información del juego -->
-                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e0e0e0;">
+                <!-- Información del juego y controles -->
+                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center;">
                     <small style="color: #666;">
                         🏢 <strong>Estudio:</strong> {{ reseña.juego.estudio }} | 
                         📅 <strong>Lanzamiento:</strong> {{ reseña.juego.fecha_publicacion|date:"Y" }}
                     </small>
+                    
+                    <!-- Botón para editar la reseña -->
+                    <a href="{% url 'editar_resena' reseña.id %}" 
+                       style="background-color: #28a745; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 14px; transition: background-color 0.3s;">
+                        ✏️ Editar
+                    </a>
                 </div>
             </div>
         {% endfor %}
