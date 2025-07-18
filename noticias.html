@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Noticias - Gaming</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header>
+    <div class="top-bar">
+      <h1>Últimas Noticias de Videojuegos</h1>
+      <div class="reloj" id="reloj"></div>
+    </div>
+    <nav>
+      <ul class="nav-horizontal">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="noticias.html" class="activo">Noticias</a></li>
+        <li><a href="juegos.html">Juegos</a></li>
+        <li><a href="reseñas.html">Reseñas</a></li>
+        <li><a href="usuarios.html">Usuarios</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="noticias" class="contenedor-noticias">
+      <!-- Las noticias se cargan desde la API -->
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Grupo 5 - Gaming. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    // Reloj
+    function actualizarReloj() {
+      const reloj = document.getElementById("reloj");
+      const ahora = new Date();
+      const hora = ahora.toLocaleTimeString();
+      reloj.textContent = hora;
+    }
+    setInterval(actualizarReloj, 1000);
+    actualizarReloj();
+
+    // Noticias desde API
+    const apiKey = "4a1ede5298b4406ab72469930ef3208e";
+    const url = `https://newsapi.org/v2/everything?q=videojuegos&language=es&apiKey=${apiKey}`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        const contenedor = document.getElementById("noticias");
+        data.articles.forEach(noticia => {
+          const div = document.createElement("div");
+          div.classList.add("noticia");
+          div.innerHTML = `
+            <h3>${noticia.title}</h3>
+            ${noticia.urlToImage ? `<img src="${noticia.urlToImage}" alt="Imagen de la noticia">` : ''}
+            <p>${noticia.description || "Sin descripción disponible."}</p>
+            <a href="${noticia.url}" target="_blank">Leer más</a>
+          `;
+          contenedor.appendChild(div);
+        });
+      })
+      .catch(error => {
+        console.error("Error al obtener noticias:", error);
+        document.getElementById("noticias").innerHTML = "<p>Error al cargar las noticias.</p>";
+      });
+  </script>
+</body>
+</html>
