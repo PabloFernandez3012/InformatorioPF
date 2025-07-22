@@ -22,34 +22,352 @@ Solo el autor de la reseña puede acceder a esta página.
     <strong style="color: #007bff;">✏️ Editar Reseña</strong>
 {% endblock %}
 
-<!-- Inicia el bloque de contenido específico de esta página -->
 {% block content %}
 
-<!-- ===== ENCABEZADO CON INFORMACIÓN DEL JUEGO ===== -->
-<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 15px; margin-bottom: 30px; color: white; text-align: center;">
-    <h1 style="margin: 0; font-size: 2.2em;">✏️ Editar tu Reseña</h1>
-    <p style="margin: 10px 0 0 0; font-size: 1.3em; opacity: 0.9;">
+<style>
+    /* Estilos modernos para el formulario de editar reseña */
+    .edit-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 40px;
+        border-radius: 20px;
+        margin-bottom: 35px;
+        color: white;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+    
+    .edit-title {
+        margin: 0;
+        font-size: 2.5em;
+        font-weight: bold;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .edit-subtitle {
+        margin: 15px 0 0 0;
+        font-size: 1.3em;
+        opacity: 0.95;
+        font-weight: 500;
+    }
+    
+    .game-info-card {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        margin-bottom: 35px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .dark .game-info-card {
+        background: #1f2937;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+    
+    .game-header {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        margin-bottom: 25px;
+    }
+    
+    .game-icon {
+        font-size: 3.5em;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    }
+    
+    .game-details h2 {
+        margin: 0 0 10px 0;
+        color: #1a202c;
+        font-size: 1.8em;
+        font-weight: bold;
+    }
+    
+    .dark .game-details h2 {
+        color: #f7fafc;
+    }
+    
+    .game-meta {
+        margin: 0;
+        color: #6b7280;
+        line-height: 1.8;
+        font-size: 1.05em;
+    }
+    
+    .dark .game-meta {
+        color: #9ca3af;
+    }
+    
+    .game-description {
+        background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+        padding: 25px;
+        border-radius: 15px;
+        border-left: 5px solid #667eea;
+        transition: all 0.3s ease;
+    }
+    
+    .dark .game-description {
+        background: linear-gradient(135deg, #374151, #4b5563);
+        border-left-color: #a78bfa;
+    }
+    
+    .game-description h4 {
+        color: #374151;
+        margin-bottom: 15px;
+        font-size: 1.2em;
+        font-weight: 600;
+    }
+    
+    .dark .game-description h4 {
+        color: #e5e7eb;
+    }
+    
+    .game-description p {
+        color: #6b7280;
+        margin: 0;
+        line-height: 1.7;
+        font-size: 1.05em;
+    }
+    
+    .dark .game-description p {
+        color: #d1d5db;
+    }
+    
+    .form-container {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 35px;
+    }
+    
+    .dark .form-container {
+        background: #1f2937;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .form-container h3 {
+        color: #1a202c;
+        margin-bottom: 30px;
+        text-align: center;
+        font-size: 1.8em;
+        font-weight: bold;
+    }
+    
+    .dark .form-container h3 {
+        color: #f7fafc;
+    }
+    
+    .form-field {
+        margin-bottom: 30px;
+    }
+    
+    .form-field label {
+        display: block;
+        margin-bottom: 12px;
+        font-weight: 600;
+        color: #1a202c;
+        font-size: 1.15em;
+    }
+    
+    .dark .form-field label {
+        color: #e2e8f0;
+    }
+    
+    .form-field select,
+    .form-field textarea {
+        width: 100%;
+        padding: 18px 20px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1.05em;
+        color: #1a202c;
+        background: #ffffff;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+    
+    .dark .form-field select,
+    .dark .form-field textarea {
+        background: #374151;
+        border-color: #4b5563;
+        color: #f9fafb;
+    }
+    
+    .form-field select:focus,
+    .form-field textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+        transform: translateY(-2px);
+    }
+    
+    .form-field textarea {
+        resize: vertical;
+        min-height: 140px;
+        line-height: 1.6;
+    }
+    
+    .form-field textarea::placeholder {
+        color: #9ca3af;
+        font-style: italic;
+    }
+    
+    .dark .form-field textarea::placeholder {
+        color: #6b7280;
+    }
+    
+    .form-field small {
+        display: block;
+        margin-top: 8px;
+        color: #6b7280;
+        font-size: 0.95em;
+        font-style: italic;
+    }
+    
+    .dark .form-field small {
+        color: #9ca3af;
+    }
+    
+    .btn {
+        padding: 18px 35px;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        color: white;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 50%, #f093fb 100%);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        text-decoration: none;
+        color: white;
+    }
+    
+    .btn-secondary {
+        background: #6b7280;
+        color: white;
+    }
+    
+    .dark .btn-secondary {
+        background: #4b5563;
+    }
+    
+    .btn-secondary:hover {
+        background: #374151;
+        transform: translateY(-2px);
+        text-decoration: none;
+        color: white;
+    }
+    
+    .buttons-container {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 40px;
+    }
+    
+    .info-card {
+        background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+        padding: 25px;
+        border-radius: 15px;
+        margin-top: 35px;
+        text-align: center;
+        border: 2px dashed #cbd5e0;
+        transition: all 0.3s ease;
+    }
+    
+    .dark .info-card {
+        background: linear-gradient(135deg, #374151, #4b5563);
+        border-color: #6b7280;
+    }
+    
+    .info-card h4 {
+        color: #374151;
+        margin-bottom: 18px;
+        font-size: 1.3em;
+        font-weight: 600;
+    }
+    
+    .dark .info-card h4 {
+        color: #e5e7eb;
+    }
+    
+    .info-card p {
+        color: #6b7280;
+        margin: 0;
+        line-height: 1.8;
+        font-size: 1.05em;
+    }
+    
+    .dark .info-card p {
+        color: #d1d5db;
+    }
+    
+    @media (max-width: 768px) {
+        .edit-header,
+        .game-info-card,
+        .form-container {
+            margin-left: 15px;
+            margin-right: 15px;
+            padding: 25px;
+        }
+        
+        .game-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 15px;
+        }
+        
+        .buttons-container {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn {
+            width: 100%;
+            max-width: 280px;
+        }
+    }
+</style>
+
+<div class="edit-header">
+    <h1 class="edit-title">✏️ Editar tu Reseña</h1>
+    <p class="edit-subtitle">
         📝 Modifica tu opinión sobre <strong>{{ juego.nombre }}</strong>
     </p>
 </div>
 
-<!-- ===== MOSTRAR MENSAJES (éxito, error, etc.) ===== -->
 {% if messages %}
     {% for message in messages %}
         <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-error{% else %}alert-info{% endif %}" 
-             style="margin-bottom: 20px;">
+             style="margin-bottom: 25px; padding: 15px; border-radius: 10px;">
             {{ message }}
         </div>
     {% endfor %}
 {% endif %}
 
-<!-- ===== INFORMACIÓN DEL JUEGO ===== -->
-<div style="background: white; padding: 25px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
-    <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
-        <div style="font-size: 3em;">🎮</div>
-        <div>
-            <h2 style="margin: 0 0 8px 0; color: #343a40;">{{ juego.nombre }}</h2>
-            <p style="margin: 0; color: #6c757d;">
+<div class="game-info-card">
+    <div class="game-header">
+        <div class="game-icon">🎮</div>
+        <div class="game-details">
+            <h2>{{ juego.nombre }}</h2>
+            <p class="game-meta">
                 <strong>🏢 Estudio:</strong> {{ juego.estudio }}<br>
                 <strong>📅 Fecha:</strong> {{ juego.fecha_publicacion|date:"d M Y" }}<br>
                 <strong>🏷️ Categorías:</strong> {{ juego.categorias_texto }}
@@ -57,23 +375,18 @@ Solo el autor de la reseña puede acceder a esta página.
         </div>
     </div>
     
-    <!-- Descripción del juego -->
-    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #007bff;">
-        <h4 style="color: #495057; margin-bottom: 10px;">📖 Descripción:</h4>
-        <p style="color: #6c757d; margin: 0; line-height: 1.6;">{{ juego.descripcion }}</p>
+    <div class="game-description">
+        <h4>📖 Descripción:</h4>
+        <p>{{ juego.descripcion }}</p>
     </div>
 </div>
 
-<!-- ===== FORMULARIO DE EDICIÓN DE RESEÑA ===== -->
 <div class="form-container">
-    <h3 style="color: #343a40; margin-bottom: 25px; text-align: center;">
-        ✏️ Edita tu Reseña
-    </h3>
+    <h3>✏️ Edita tu Reseña</h3>
     
-    <form method="POST" style="max-width: none;">
+    <form method="POST">
         {% csrf_token %}
         
-        <!-- ===== CAMPO DE PUNTUACIÓN ===== -->
         <div class="form-field">
             <label for="puntuacion">⭐ Puntuación (1-5 estrellas):</label>
             <select name="puntuacion" id="puntuacion" required>
@@ -86,7 +399,6 @@ Solo el autor de la reseña puede acceder a esta página.
             </select>
         </div>
         
-        <!-- ===== CAMPO DE COMENTARIO ===== -->
         <div class="form-field">
             <label for="comentario">💬 Tu comentario actualizado:</label>
             <textarea name="comentario" 
@@ -94,13 +406,12 @@ Solo el autor de la reseña puede acceder a esta página.
                       rows="6" 
                       placeholder="Comparte tu experiencia actualizada con este juego..." 
                       required>{{ resena.comentario }}</textarea>
-            <small style="color: #6c757d; font-size: 14px;">
+            <small>
                 💡 Tip: Explica qué cambió en tu opinión y por qué actualizas tu reseña
             </small>
         </div>
         
-        <!-- ===== BOTONES DE ACCIÓN ===== -->
-        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+        <div class="buttons-container">
             <button type="submit" class="btn btn-primary">
                 ✅ Actualizar Reseña
             </button>
@@ -111,78 +422,14 @@ Solo el autor de la reseña puede acceder a esta página.
     </form>
 </div>
 
-<!-- ===== INFORMACIÓN ADICIONAL ===== -->
-<div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 30px; text-align: center; border: 2px dashed #dee2e6;">
-    <h4 style="color: #495057; margin-bottom: 15px;">ℹ️ Información Importante</h4>
-    <p style="color: #6c757d; margin: 0; line-height: 1.6;">
+<div class="info-card">
+    <h4>ℹ️ Información Importante</h4>
+    <p>
         • Solo puedes editar tus propias reseñas<br>
         • Los cambios se guardarán inmediatamente<br>
         • Tu reseña actualizada será visible para todos los usuarios<br>
         • Puedes cambiar tanto la puntuación como el comentario
     </p>
 </div>
-
-<!-- ===== JAVASCRIPT PARA MEJORAR LA EXPERIENCIA ===== -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Validación del formulario antes de enviar
-    const form = document.querySelector('form');
-    const puntuacionSelect = document.getElementById('puntuacion');
-    const comentarioTextarea = document.getElementById('comentario');
-    
-    form.addEventListener('submit', function(e) {
-        let isValid = true;
-        let errors = [];
-        
-        // Validar puntuación
-        if (!puntuacionSelect.value) {
-            errors.push('Debes seleccionar una puntuación');
-            isValid = false;
-        }
-        
-        // Validar comentario
-        const comentario = comentarioTextarea.value.trim();
-        if (comentario.length < 10) {
-            errors.push('El comentario debe tener al menos 10 caracteres');
-            isValid = false;
-        }
-        
-        if (comentario.length > 1000) {
-            errors.push('El comentario no puede exceder 1000 caracteres');
-            isValid = false;
-        }
-        
-        // Si hay errores, mostrarlos y prevenir envío
-        if (!isValid) {
-            e.preventDefault();
-            alert('Por favor corrige los siguientes errores:\n\n' + errors.join('\n'));
-        }
-    });
-    
-    // Contador de caracteres para el comentario
-    comentarioTextarea.addEventListener('input', function() {
-        const length = this.value.length;
-        const maxLength = 1000;
-        const remaining = maxLength - length;
-        
-        // Crear o actualizar contador
-        let counter = document.getElementById('char-counter');
-        if (!counter) {
-            counter = document.createElement('small');
-            counter.id = 'char-counter';
-            counter.style.display = 'block';
-            counter.style.textAlign = 'right';
-            counter.style.marginTop = '5px';
-            this.parentNode.appendChild(counter);
-        }
-        
-        counter.textContent = `${length}/${maxLength} caracteres`;
-        counter.style.color = remaining < 50 ? '#dc3545' : '#6c757d';
-    });
-    
-    // Trigger inicial del contador
-    comentarioTextarea.dispatchEvent(new Event('input'));
-});
-</script>
 
 {% endblock %}

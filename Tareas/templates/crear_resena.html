@@ -24,80 +24,239 @@ Solo se puede acceder a esta página si el usuario está logueado.
 
 {% block content %}
 
-<!-- ===== TÍTULO DEL FORMULARIO ===== -->
-<!-- {{ juego.nombre }} viene de la vista crear_resena() -->
-<h1>Escribir Reseña para "{{ juego.nombre }}"</h1>
+<style>
+    /* Estilos modernos para el formulario de crear reseña */
+    .review-container {
+        max-width: 700px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .dark .review-container {
+        background: #1f2937;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+    
+    .review-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #1a202c;
+        text-align: center;
+        margin-bottom: 15px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    
+    .dark .review-title {
+        color: #f7fafc;
+    }
+    
+    .game-subtitle {
+        text-align: center;
+        color: #667eea;
+        font-size: 1.3rem;
+        margin-bottom: 35px;
+        font-weight: 600;
+    }
+    
+    .dark .game-subtitle {
+        color: #a78bfa;
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 600;
+        color: #1a202c;
+        font-size: 1.1rem;
+    }
+    
+    .dark .form-label {
+        color: #e2e8f0;
+    }
+    
+    .form-select {
+        width: 100%;
+        padding: 15px 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        color: #1a202c;
+        background: #ffffff;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .dark .form-select {
+        background: #374151;
+        border-color: #4b5563;
+        color: #f9fafb;
+    }
+    
+    .form-select:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        transform: translateY(-1px);
+    }
+    
+    .form-textarea {
+        width: 100%;
+        padding: 15px 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        color: #1a202c;
+        background: #ffffff;
+        font-weight: 500;
+        font-family: inherit;
+        line-height: 1.6;
+        resize: vertical;
+        min-height: 120px;
+        transition: all 0.3s ease;
+    }
+    
+    .dark .form-textarea {
+        background: #374151;
+        border-color: #4b5563;
+        color: #f9fafb;
+    }
+    
+    .form-textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        transform: translateY(-1px);
+    }
+    
+    .form-textarea::placeholder {
+        color: #9ca3af;
+        font-style: italic;
+    }
+    
+    .dark .form-textarea::placeholder {
+        color: #6b7280;
+    }
+    
+    .btn-submit {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        color: white;
+        padding: 18px 35px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    
+    .btn-submit:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 50%, #f093fb 100%);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-submit:active {
+        transform: translateY(-1px) scale(1.01);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+    }
+    
+    .btn-cancel {
+        background: #6b7280;
+        color: white;
+        padding: 18px 35px;
+        border: none;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        display: inline-block;
+        margin-left: 15px;
+    }
+    
+    .dark .btn-cancel {
+        background: #4b5563;
+    }
+    
+    .btn-cancel:hover {
+        background: #374151;
+        transform: translateY(-2px);
+        text-decoration: none;
+        color: white;
+    }
+    
+    .buttons-container {
+        text-align: center;
+        margin-top: 35px;
+    }
+    
+    @media (max-width: 640px) {
+        .review-container {
+            margin: 10px;
+            padding: 25px;
+        }
+        
+        .btn-cancel {
+            margin-left: 0;
+            margin-top: 15px;
+            display: block;
+        }
+    }
+</style>
 
-<!-- 
-=============================================================================
-FORMULARIO DE CREAR RESEÑA
-=============================================================================
-Este formulario envía datos por POST a la misma URL cuando se envía
--->
-<form method="post" style="max-width: 500px;">
-    <!-- ===== TOKEN DE SEGURIDAD CSRF ===== -->
-    <!-- Django requiere este token para prevenir ataques CSRF -->
-    {% csrf_token %}
-    
-    <!-- 
-    =============================================================================
-    CAMPO DE PUNTUACIÓN
-    =============================================================================
-    Select dropdown para elegir puntuación del 1 al 5
-    -->
-    <div style="margin-bottom: 15px;">
-        <label for="puntuacion" style="display: block; margin-bottom: 5px;">Puntuación:</label>
-        <!-- El 'name="puntuacion"' es lo que recibe request.POST['puntuacion'] en la vista -->
-        <select name="puntuacion" id="puntuacion" required style="width: 100%; padding: 8px;">
-            <option value="">Selecciona una puntuación</option>
-            <!-- Cada option tiene un value que se envía al servidor -->
-            <option value="1">1 - Muy malo</option>
-            <option value="2">2 - Malo</option>
-            <option value="3">3 - Regular</option>
-            <option value="4">4 - Bueno</option>
-            <option value="5">5 - Excelente</option>
-        </select>
-    </div>
-    
-    <!-- 
-    =============================================================================
-    CAMPO DE COMENTARIO
-    =============================================================================
-    Textarea para que el usuario escriba su opinión detallada
-    -->
-    <div style="margin-bottom: 15px;">
-        <label for="comentario" style="display: block; margin-bottom: 5px;">Comentario:</label>
-        <!-- El 'name="comentario"' es lo que recibe request.POST['comentario'] en la vista -->
-        <textarea name="comentario" 
-                  id="comentario" 
-                  rows="5" 
-                  required 
-                  style="width: 100%; padding: 8px;" 
-                  placeholder="Escribe tu opinión sobre el juego...">
-        </textarea>
-    </div>
-    
-    <!-- 
-    =============================================================================
-    BOTONES DE ACCIÓN
-    =============================================================================
-    Botón para enviar el formulario y enlace para cancelar
-    -->
-    
-    <!-- ===== BOTÓN DE ENVIAR ===== -->
-    <!-- type="submit" hace que el formulario se envíe por POST -->
-    <button type="submit" 
-            style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
-        Publicar Reseña
-    </button>
-    
-    <!-- ===== BOTÓN DE CANCELAR ===== -->
-    <!-- Enlace que regresa al detalle del juego sin guardar nada -->
-    <!-- {% url 'detalle_juego' juego.id %} genera URL como /juego/5/ -->
-    <a href="{% url 'detalle_juego' juego.id %}" 
-       style="margin-left: 10px; padding: 10px 20px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 5px;">
-       Cancelar
-    </a>
-</form>
+<div class="review-container">
+    <h1 class="review-title">✍️ Escribir Reseña</h1>
+    <p class="game-subtitle">📝 Comparte tu opinión sobre "{{ juego.nombre }}"</p>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="puntuacion" class="form-label">⭐ Puntuación:</label>
+            <select name="puntuacion" id="puntuacion" required class="form-select">
+                <option value="">Selecciona una puntuación</option>
+                <option value="1">⭐ 1 - Muy malo</option>
+                <option value="2">⭐⭐ 2 - Malo</option>
+                <option value="3">⭐⭐⭐ 3 - Regular</option>
+                <option value="4">⭐⭐⭐⭐ 4 - Bueno</option>
+                <option value="5">⭐⭐⭐⭐⭐ 5 - Excelente</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="comentario" class="form-label">💬 Comentario:</label>
+            <textarea name="comentario" 
+                      id="comentario" 
+                      rows="6" 
+                      required 
+                      class="form-textarea"
+                      placeholder="Comparte tu experiencia detallada con este juego. ¿Qué te gustó más? ¿Qué mejorarías? ¿Lo recomendarías?"></textarea>
+        </div>
+        
+        <div class="buttons-container">
+            <button type="submit" class="btn-submit">
+                🚀 Publicar Reseña
+            </button>
+            <a href="{% url 'detalle_juego' juego.id %}" class="btn-cancel">
+                ❌ Cancelar
+            </a>
+        </div>
+    </form>
+</div>
 
 {% endblock %}

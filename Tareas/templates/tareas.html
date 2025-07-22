@@ -109,14 +109,14 @@
             <!-- Stats -->
             <div class="flex items-center justify-between border-t dark:border-gray-600 pt-4">
                 <div class="flex items-center space-x-2">
-                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ total_juegos }} juego{{ total_juegos|pluralize }} encontrado{{ total_juegos|pluralize }}</span>
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{{ total_juegos }} juego{{ total_juegos|pluralize }} encontrado{{ total_juegos|pluralize }}</span>
                     {% if busqueda_actual or categoria_actual or estudio_actual or ano_actual %}
                         <span class="text-sm text-purple-600 dark:text-purple-400 font-medium">(filtrados)</span>
                     {% endif %}
                 </div>
                 <div class="flex items-center space-x-4">
                     {% if page_obj.has_other_pages %}
-                        <span class="text-sm text-gray-600 dark:text-gray-400">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+                        <span class="text-sm text-gray-700 dark:text-gray-300">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
                     {% endif %}
                 </div>
             </div>
@@ -170,7 +170,7 @@
                             <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
                                 <a href="{% url 'detalle_juego' juego.id %}">{{ juego.nombre }}</a>
                             </h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ juego.estudio }}</p>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">{{ juego.estudio }}</p>
                         </div>
 
                         <p class="text-gray-700 dark:text-gray-300 text-sm mb-4 line-clamp-2">
@@ -187,7 +187,7 @@
                                 </span>
                                 {% endfor %}
                                 {% if juego.categorias.all|length > 2 %}
-                                <span class="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 text-xs px-2 py-1 rounded-full">
+                                <span class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs px-2 py-1 rounded-full">
                                     +{{ juego.categorias.all|length|add:"-2" }}
                                 </span>
                                 {% endif %}
@@ -197,7 +197,7 @@
 
                         <!-- Footer with date and rating -->
                         <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-500 dark:text-gray-400">{{ juego.fecha_publicacion|date:"Y" }}</span>
+                            <span class="text-gray-600 dark:text-gray-300">{{ juego.fecha_publicacion|date:"Y" }}</span>
                             <div class="flex items-center space-x-1">                        {% if juego.promedio_puntuacion > 0 %}
                             <div class="flex items-center">
                                 {% with juego.promedio_puntuacion|floatformat:0 as estrellas_llenas %}
@@ -210,10 +210,10 @@
                                     {% endfor %}
                                 {% endwith %}
                             </div>
-                            <span class="text-gray-600 dark:text-gray-400 ml-1">{{ juego.promedio_puntuacion|floatformat:1 }}</span>
-                            <span class="text-gray-400 dark:text-gray-500 text-xs">({{ juego.total_resenas }})</span>
+                            <span class="text-gray-700 dark:text-gray-300 ml-1">{{ juego.promedio_puntuacion|floatformat:1 }}</span>
+                            <span class="text-gray-500 dark:text-gray-400 text-xs">({{ juego.total_resenas }})</span>
                         {% else %}
-                            <span class="text-gray-400 dark:text-gray-500 text-sm">Sin reseñas</span>
+                            <span class="text-gray-500 dark:text-gray-400 text-sm">Sin reseñas</span>
                         {% endif %}
                             </div>
                         </div>
