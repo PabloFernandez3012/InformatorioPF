@@ -7,7 +7,7 @@ from django.contrib.auth.models import User  # Modelo de usuario de Django
 from django.contrib.auth import login, logout, authenticate  # Funciones para manejo de autenticación
 from django.contrib.auth.decorators import login_required  # Decorador para requerir login
 from django.db import IntegrityError  # Excepción para errores de base de datos
-from .models import Juego, Resena  # Nuestros modelos personalizados
+from .models import Juego, Resena, VotoResena  # Nuestros modelos personalizados
 from .forms import FormularioRegistroPersonalizado  # Formulario personalizado de registro
 from django.contrib import messages  # Para mostrar mensajes de éxito/error
 import requests  # Para hacer peticiones HTTP a APIs externas
@@ -774,6 +774,104 @@ def editar_resena(request, resena_id):
     return render(request, 'editar_resena.html', {
         'resena': resena,
         'juego': resena.juego
+    })
+
+# =============================================================================
+# SISTEMA DE LIKES/DISLIKES PARA RESEÑAS (ESTILO YOUTUBE)
+# =============================================================================
+
+@login_required
+def votar_resena(request, resena_id):
+    """
+    Vista para manejar los votos (likes/dislikes) en las reseñas.
+    Funciona similar al sistema de YouTube:
+    - Un usuario puede dar like o dislike a una reseña
+    - Si ya votó, puede cambiar su voto o eliminarlo
+    - No puede votar su propia reseña
+    """
+    if request.method != 'POST':
+        messages.error(request, 'Método no permitido.')
+        return redirect('home')
+    
+    resena = get_object_or_404(Resena, id=resena_id)
+    
+    # Permitir que los usuarios voten sus propias reseñas (como en YouTube)
+    # Ya no hay restricción para votar la propia reseña
+    
+    # Obtener el tipo de voto del formulario
+    es_like = request.POST.get('es_like') == 'true'
+    
+    try:
+        # Verificar si el usuario ya votó esta reseña
+        voto_existente = VotoResena.objects.get(resena=resena, usuario=request.user)
+        
+        if voto_existente.es_like == es_like:
+            # Si es el mismo voto, eliminarlo (toggle)
+            voto_existente.delete()
+            action = 'removed'
+        else:
+            # Si es diferente, cambiar el voto
+            voto_existente.es_like = es_like
+            voto_existente.save()
+            action = 'changed'
+            
+    except VotoResena.DoesNotExist:
+        # Si no había voto previo, crear uno nuevo
+        VotoResena.objects.create(
+            resena=resena,
+            usuario=request.user,
+            es_like=es_like
+        )
+        action = 'created'
+    
+    # Preparar la respuesta JSON para AJAX
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        from django.http import JsonResponse
+        return JsonResponse({
+            'success': True,
+            'action': action,
+            'total_likes': resena.total_likes(),
+            'total_dislikes': resena.total_dislikes(),
+            'is_own_review': resena.usuario == request.user,
+            'message': 'Voto registrado correctamente.'
+        })
+    
+    # Si no es AJAX, redirigir a la página del juego
+    tipo_voto = "👍 Like" if es_like else "👎 Dislike"
+    es_propia = resena.usuario == request.user
+    
+    if action == 'removed':
+        mensaje = f'Se eliminó tu {tipo_voto}' + (' de tu propia reseña.' if es_propia else '.')
+    elif action == 'changed':
+        mensaje = f'Cambiaste tu voto a {tipo_voto}' + (' en tu propia reseña.' if es_propia else '.')
+    else:
+        mensaje = f'¡{tipo_voto} agregado' + (' a tu propia reseña!' if es_propia else '!')
+    
+    messages.success(request, mensaje)
+    
+    return redirect('detalle_juego', juego_id=resena.juego.id)
+
+@login_required 
+def obtener_estado_voto(request, resena_id):
+    """
+    Vista AJAX para obtener el estado actual del voto del usuario en una reseña.
+    Retorna si el usuario ya votó y qué tipo de voto fue.
+    """
+    resena = get_object_or_404(Resena, id=resena_id)
+    
+    try:
+        voto = VotoResena.objects.get(resena=resena, usuario=request.user)
+        estado_voto = 'like' if voto.es_like else 'dislike'
+    except VotoResena.DoesNotExist:
+        estado_voto = None
+    
+    from django.http import JsonResponse
+    return JsonResponse({
+        'user_vote': estado_voto,
+        'total_likes': resena.total_likes(),
+        'total_dislikes': resena.total_dislikes(),
+        'can_vote': True,  # Todos los usuarios autenticados pueden votar cualquier reseña
+        'is_own_review': resena.usuario == request.user
     })
 
 # =============================================================================

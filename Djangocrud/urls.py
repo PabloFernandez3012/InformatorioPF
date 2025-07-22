@@ -64,6 +64,15 @@ urlpatterns = [
     path('resena/<int:resena_id>/editar/', views.editar_resena, name='editar_resena'),
     
     # =========================================================================
+    # SISTEMA DE VOTOS (LIKES/DISLIKES) PARA RESEÑAS
+    # =========================================================================
+    # URL: /resena/1/votar/ - Votar (like/dislike) en reseña con ID=1
+    path('resena/<int:resena_id>/votar/', views.votar_resena, name='votar_resena'),
+    
+    # URL: /resena/1/estado-voto/ - Obtener estado del voto del usuario (AJAX)
+    path('resena/<int:resena_id>/estado-voto/', views.obtener_estado_voto, name='estado_voto'),
+    
+    # =========================================================================
     # PERFIL Y CONFIGURACIÓN DE USUARIO
     # =========================================================================
     # URL: /perfil/ - Ver perfil del usuario autenticado

@@ -257,19 +257,64 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                {% if user == resena.usuario %}
-                                <div class="flex space-x-2">
-                                    <a href="{% url 'editar_resena' resena.id %}" 
-                                       class="text-purple-600 hover:text-purple-700 text-sm font-medium">
-                                        Editar
-                                    </a>
-                                </div>
-                                {% endif %}
                             </div>
                             
                             <div class="mt-4">
                                 <p class="text-gray-700">{{ resena.comentario }}</p>
+                                
+                                <!-- Sistema de Likes/Dislikes estilo YouTube -->
+                                <div class="mt-4 flex items-center justify-between">
+                                    <div class="flex items-center space-x-4">
+                                        {% if user.is_authenticated %}
+                                            <!-- Botón de Like -->
+                                            <button type="button" 
+                                                    class="like-btn flex items-center space-x-1 px-3 py-1 rounded-full text-sm transition-all duration-200 hover:bg-gray-100" 
+                                                    data-resena-id="{{ resena.id }}" 
+                                                    data-vote-type="like">
+                                                <span class="like-icon text-lg">👍</span>
+                                                <span class="like-count text-gray-600">{{ resena.total_likes }}</span>
+                                            </button>
+                                            
+                                            <!-- Botón de Dislike -->
+                                            <button type="button" 
+                                                    class="dislike-btn flex items-center space-x-1 px-3 py-1 rounded-full text-sm transition-all duration-200 hover:bg-gray-100" 
+                                                    data-resena-id="{{ resena.id }}" 
+                                                    data-vote-type="dislike">
+                                                <span class="dislike-icon text-lg">👎</span>
+                                                <span class="dislike-count text-gray-600">{{ resena.total_dislikes }}</span>
+                                            </button>
+                                            
+                                            {% if user == resena.usuario %}
+                                                <span class="text-xs text-gray-400">· Tu reseña</span>
+                                            {% endif %}
+                                        {% else %}
+                                            <!-- Mostrar solo los contadores sin botones -->
+                                            <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                                <span class="flex items-center space-x-1">
+                                                    <span class="text-lg">👍</span>
+                                                    <span>{{ resena.total_likes }}</span>
+                                                </span>
+                                                <span class="flex items-center space-x-1">
+                                                    <span class="text-lg">👎</span>
+                                                    <span>{{ resena.total_dislikes }}</span>
+                                                </span>
+                                                <span class="text-xs text-gray-400">
+                                                    · <a href="{% url 'entrar' %}" class="text-purple-600 hover:text-purple-700">Inicia sesión</a> para votar
+                                                </span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <!-- Botón de editar (solo para el autor) -->
+                                    {% if user == resena.usuario %}
+                                        <div class="flex space-x-2">
+                                            <a href="{% url 'editar_resena' resena.id %}" 
+                                               class="text-purple-600 hover:text-purple-700 text-sm font-medium">
+                                                Editar
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                         {% endfor %}
@@ -287,4 +332,243 @@
         </div>
     </div>
 </div>
+
+<!-- CSS y JavaScript para el sistema de Likes/Dislikes -->
+<style>
+/* Estilos para los botones de like/dislike */
+.like-btn, .dislike-btn {
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid transparent;
+}
+
+.like-btn:hover {
+    background-color: #f3f4f6 !important;
+    border-color: #10b981;
+}
+
+.dislike-btn:hover {
+    background-color: #f3f4f6 !important;
+    border-color: #ef4444;
+}
+
+/* Estados activos */
+.like-btn.active {
+    background-color: #d1fae5 !important;
+    border-color: #10b981;
+    color: #059669;
+}
+
+.like-btn.active.own-review {
+    background-color: #dbeafe !important;
+    border-color: #3b82f6;
+    color: #2563eb;
+}
+
+.like-btn.active .like-icon {
+    filter: brightness(1.2);
+}
+
+.dislike-btn.active {
+    background-color: #fee2e2 !important;
+    border-color: #ef4444;
+    color: #dc2626;
+}
+
+.dislike-btn.active.own-review {
+    background-color: #fef3c7 !important;
+    border-color: #f59e0b;
+    color: #d97706;
+}
+
+.dislike-btn.active .dislike-icon {
+    filter: brightness(1.2);
+}
+
+/* Animaciones */
+.like-btn, .dislike-btn {
+    transition: all 0.2s ease;
+}
+
+.like-btn:active, .dislike-btn:active {
+    transform: scale(0.95);
+}
+
+/* Loading state */
+.vote-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Cargar estado inicial de votos para cada reseña
+    document.querySelectorAll('[data-resena-id]').forEach(function(btn) {
+        const resenaId = btn.dataset.resenaId;
+        loadVoteState(resenaId);
+    });
+
+    // Agregar event listeners a todos los botones de voto
+    document.querySelectorAll('.like-btn, .dislike-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            console.log('Botón clickeado:', this);
+            const resenaId = this.dataset.resenaId;
+            const voteType = this.dataset.voteType;
+            const isLike = voteType === 'like';
+            
+            console.log('Datos del voto:', { resenaId, voteType, isLike });
+            
+            // Prevenir múltiples clicks
+            if (this.classList.contains('vote-loading')) {
+                console.log('Voto en proceso, ignorando click');
+                return;
+            }
+            
+            submitVote(resenaId, isLike);
+        });
+    });
+
+    function loadVoteState(resenaId) {
+        fetch(`/resena/${resenaId}/estado-voto/`, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            updateButtonStates(resenaId, data.user_vote, data.is_own_review);
+            updateCounters(resenaId, data.total_likes, data.total_dislikes);
+        })
+        .catch(error => {
+            console.error('Error loading vote state:', error);
+        });
+    }
+
+    function submitVote(resenaId, isLike) {
+        console.log('Enviando voto:', { resenaId, isLike });
+        
+        const likeBtn = document.querySelector(`[data-resena-id="${resenaId}"][data-vote-type="like"]`);
+        const dislikeBtn = document.querySelector(`[data-resena-id="${resenaId}"][data-vote-type="dislike"]`);
+        
+        console.log('Botones encontrados:', { likeBtn, dislikeBtn });
+        
+        // Agregar estado de loading
+        likeBtn.classList.add('vote-loading');
+        dislikeBtn.classList.add('vote-loading');
+
+        const formData = new FormData();
+        formData.append('es_like', isLike.toString());
+        formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
+
+        fetch(`/resena/${resenaId}/votar/`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+        .then(response => {
+            console.log('Respuesta recibida:', response);
+            return response.json();
+        })
+        .then(data => {
+            console.log('Datos de respuesta:', data);
+            if (data.success) {
+                // Actualizar estados de botones según la acción
+                let newUserVote = null;
+                if (data.action === 'created') {
+                    newUserVote = isLike ? 'like' : 'dislike';
+                } else if (data.action === 'changed') {
+                    newUserVote = isLike ? 'like' : 'dislike';
+                }
+                // Si action === 'removed', newUserVote sigue siendo null
+                
+                updateButtonStates(resenaId, newUserVote, data.is_own_review);
+                updateCounters(resenaId, data.total_likes, data.total_dislikes);
+                
+                // Mostrar feedback visual
+                const targetBtn = isLike ? likeBtn : dislikeBtn;
+                showVoteFeedback(targetBtn, data.action);
+            } else {
+                console.error('Error en la respuesta:', data);
+            }
+        })
+        .catch(error => {
+            console.error('Error al votar:', error);
+        })
+        .finally(() => {
+            // Remover estado de loading
+            likeBtn.classList.remove('vote-loading');
+            dislikeBtn.classList.remove('vote-loading');
+        });
+    }
+
+    function updateButtonStates(resenaId, userVote, isOwnReview = false) {
+        const likeBtn = document.querySelector(`[data-resena-id="${resenaId}"][data-vote-type="like"]`);
+        const dislikeBtn = document.querySelector(`[data-resena-id="${resenaId}"][data-vote-type="dislike"]`);
+        
+        // Remover estados activos
+        likeBtn.classList.remove('active', 'own-review');
+        dislikeBtn.classList.remove('active', 'own-review');
+        
+        // Aplicar estado activo según el voto del usuario
+        if (userVote === 'like') {
+            likeBtn.classList.add('active');
+            if (isOwnReview) likeBtn.classList.add('own-review');
+        } else if (userVote === 'dislike') {
+            dislikeBtn.classList.add('active');
+            if (isOwnReview) dislikeBtn.classList.add('own-review');
+        }
+    }
+
+    function updateCounters(resenaId, totalLikes, totalDislikes) {
+        console.log('Actualizando contadores:', resenaId, totalLikes, totalDislikes);
+        
+        const likeCount = document.querySelector(`[data-resena-id="${resenaId}"][data-vote-type="like"] .like-count`);
+        const dislikeCount = document.querySelector(`[data-resena-id="${resenaId}"][data-vote-type="dislike"] .dislike-count`);
+        
+        console.log('Elementos encontrados:', likeCount, dislikeCount);
+        
+        if (likeCount) {
+            likeCount.textContent = totalLikes;
+            console.log('Like count actualizado a:', totalLikes);
+        } else {
+            console.error('No se encontró el elemento like-count para resena:', resenaId);
+        }
+        
+        if (dislikeCount) {
+            dislikeCount.textContent = totalDislikes;
+            console.log('Dislike count actualizado a:', totalDislikes);
+        } else {
+            console.error('No se encontró el elemento dislike-count para resena:', resenaId);
+        }
+    }
+
+    function showVoteFeedback(button, action) {
+        // Pequeña animación para mostrar que el voto fue registrado
+        button.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+            button.style.transform = '';
+        }, 150);
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
 {% endblock %}

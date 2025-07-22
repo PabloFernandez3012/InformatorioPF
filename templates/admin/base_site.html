@@ -1,0 +1,34 @@
+{% extends "admin/base.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    /* Ocultar todas las notificaciones verdes de éxito del admin */
+    .messagelist .success,
+    .messagelist .info,
+    .alert-success,
+    .messages .success,
+    ul.messagelist li.success,
+    ul.messagelist li.info {
+        display: none !important;
+    }
+    
+    /* También ocultar notificaciones específicas de Django admin */
+    .messagelist li[class*="success"],
+    .messagelist li[class*="info"] {
+        display: none !important;
+    }
+    
+    /* Mantener solo errores y warnings visibles */
+    .messagelist .error,
+    .messagelist .warning,
+    .alert-error,
+    .alert-warning,
+    .messages .error,
+    .messages .warning,
+    ul.messagelist li.error,
+    ul.messagelist li.warning {
+        display: block !important;
+    }
+</style>
+{% endblock %}

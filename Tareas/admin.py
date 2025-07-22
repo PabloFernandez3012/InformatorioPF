@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from .models import Juego, Resena, Categoria, Noticia
+from .models import Juego, Resena, Categoria, Noticia, VotoResena
 
 class CategoriaAdmin(admin.ModelAdmin):
     """
@@ -222,9 +222,34 @@ class NoticiaAdmin(admin.ModelAdmin):
     list_filter = ['fecha_publicacion']
     search_fields = ['titulo', 'contenido']
 
+class VotoResenaAdmin(admin.ModelAdmin):
+    """
+    Configuración del admin para gestionar los votos (likes/dislikes) de reseñas.
+    """
+    list_display = ['resena_info', 'usuario', 'tipo_voto', 'fecha_voto']
+    list_filter = ['es_like', 'fecha_voto']
+    search_fields = ['usuario__username', 'resena__juego__nombre']
+    readonly_fields = ['fecha_voto']
+    list_per_page = 50
+    ordering = ['-fecha_voto']
+    
+    def resena_info(self, obj):
+        """Muestra información de la reseña votada"""
+        return f"{obj.resena.juego.nombre} - {obj.resena.usuario.username}"
+    resena_info.short_description = 'Reseña'
+    
+    def tipo_voto(self, obj):
+        """Muestra el tipo de voto con emoji"""
+        if obj.es_like:
+            return format_html('<span style="color: green;">👍 Like</span>')
+        else:
+            return format_html('<span style="color: red;">👎 Dislike</span>')
+    tipo_voto.short_description = 'Voto'
+
 # Registrar los modelos
 admin.site.register(Juego, JuegoAdmin)
 admin.site.register(Categoria, CategoriaAdmin)
 admin.site.register(Resena, ResenaAdmin)
 admin.site.register(Noticia, NoticiaAdmin)
+admin.site.register(VotoResena, VotoResenaAdmin)
 

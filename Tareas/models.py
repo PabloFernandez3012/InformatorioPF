@@ -97,8 +97,42 @@ class Resena(models.Model):
     class Meta:
         unique_together = ('juego', 'usuario')  # Un usuario solo puede hacer una reseña por juego
     
+    def total_likes(self):
+        """Retorna el número total de likes de la reseña"""
+        return self.votos.filter(es_like=True).count()
+    
+    def total_dislikes(self):
+        """Retorna el número total de dislikes de la reseña"""
+        return self.votos.filter(es_like=False).count()
+    
+    def ratio_likes(self):
+        """Calcula el ratio de likes vs total de votos (0-100)"""
+        total_votos = self.votos.count()
+        if total_votos == 0:
+            return 0
+        return (self.total_likes() / total_votos) * 100
+    
     def __str__(self):
         return f"Reseña de {self.usuario.username} para {self.juego.nombre}"
+
+class VotoResena(models.Model):
+    """
+    Modelo para gestionar los likes/dislikes de las reseñas.
+    Similar al sistema de YouTube, un usuario puede dar like o dislike a una reseña.
+    """
+    resena = models.ForeignKey(Resena, on_delete=models.CASCADE, related_name='votos')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    es_like = models.BooleanField(help_text="True para like, False para dislike")
+    fecha_voto = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('resena', 'usuario')  # Un usuario solo puede votar una vez por reseña
+        verbose_name = "Voto de Reseña"
+        verbose_name_plural = "Votos de Reseñas"
+    
+    def __str__(self):
+        tipo_voto = "👍 Like" if self.es_like else "👎 Dislike"
+        return f"{tipo_voto} de {self.usuario.username} en reseña de {self.resena.juego.nombre}"
 
 class Noticia(models.Model):
     """

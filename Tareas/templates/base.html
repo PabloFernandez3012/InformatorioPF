@@ -9,7 +9,7 @@ Incluye la navegación, estilos básicos y el contenido dinámico.
 {% load static %} <!-- Cargar archivos estáticos -->
 
 <!DOCTYPE html>
-<html lang="es"> <!-- Idioma español para mejor accesibilidad -->
+<html lang="es" id="html-root"> <!-- Idioma español para mejor accesibilidad -->
 <head>
     <!-- Metadatos básicos para el navegador -->
     <meta charset="UTF-8"> <!-- Codificación de caracteres UTF-8 -->
@@ -22,6 +22,7 @@ Incluye la navegación, estilos básicos y el contenido dinámico.
     <!-- Configuración personalizada de Tailwind -->
     <script>
         tailwind.config = {
+            darkMode: 'class', // Habilitar modo oscuro con clases
             theme: {
                 extend: {
                     colors: {
@@ -78,21 +79,43 @@ Incluye la navegación, estilos básicos y el contenido dinámico.
     Estilos que aún no se han movido al archivo CSS externo
     -->
     <style>
+        /* ===== VARIABLES CSS PARA MODO OSCURO ===== */
+        :root {
+            --bg-primary: #f8f9fa;
+            --bg-nav: #343a40;
+            --text-primary: #212529;
+            --text-nav: #ffffff;
+            --border-color: rgba(0,0,0,0.1);
+            --hover-bg: rgba(255,255,255,0.1);
+        }
+        
+        .dark {
+            --bg-primary: #1f2937;
+            --bg-nav: #111827;
+            --text-primary: #f9fafb;
+            --text-nav: #f9fafb;
+            --border-color: rgba(255,255,255,0.1);
+            --hover-bg: rgba(255,255,255,0.1);
+        }
+        
         /* Resetear márgenes y padding del body */
         body {
             margin: 0;
             padding: 20px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         
         /* Estilos para la barra de navegación */
         nav {
-            background-color: #343a40;
+            background-color: var(--bg-nav);
             padding: 15px 20px;
             border-radius: 8px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px var(--border-color);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
         
         /* Contenedor principal del menú */
@@ -124,7 +147,7 @@ Incluye la navegación, estilos básicos y el contenido dinámico.
         
         /* Estilos para los enlaces */
         nav a {
-            color: #ffffff;
+            color: var(--text-nav);
             text-decoration: none;
             padding: 8px 16px;
             border-radius: 5px;
@@ -135,8 +158,24 @@ Incluye la navegación, estilos básicos y el contenido dinámico.
         
         /* Efecto hover para los enlaces */
         nav a:hover {
-            background-color: #495057;
+            background-color: var(--hover-bg);
             transform: translateY(-1px);
+        }
+        
+        /* Estilos para el botón de tema */
+        .theme-toggle-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            color: var(--text-nav);
+        }
+        
+        .theme-toggle-btn:hover {
+            background-color: var(--hover-bg);
+            transform: scale(1.1);
         }
         
         /* ===== INDICADOR DE PÁGINA ACTIVA ===== */
@@ -273,7 +312,7 @@ Incluye la navegación, estilos básicos y el contenido dinámico.
         }
     </style>
 </head>
-<body>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
     <!-- 
     =============================================================================
     BARRA DE NAVEGACIÓN PRINCIPAL MEJORADA
@@ -308,6 +347,18 @@ Incluye la navegación, estilos básicos y el contenido dinámico.
                        class="{% if request.resolver_match.url_name == 'acerca_de' %}active{% endif %}">
                         ℹ️ Acerca de...
                     </a>
+                </li>
+                
+                <li>
+                    <!-- Botón de modo oscuro/claro -->
+                    <button id="theme-toggle" 
+                            class="theme-toggle-btn flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            title="Cambiar modo de color">
+                        <!-- Icono del sol (se muestra en modo oscuro para cambiar a claro) -->
+                        <span id="sun-icon" class="text-xl">☀️</span>
+                        <!-- Icono de la luna (se muestra en modo claro para cambiar a oscuro) -->
+                        <span id="moon-icon" class="text-xl hidden">🌙</span>
+                    </button>
                 </li>
             </div>
             
@@ -396,6 +447,69 @@ Incluye la navegación, estilos básicos y el contenido dinámico.
     -->
     {% block content %}
     {% endblock %}
+    
+    <!-- JavaScript para el modo oscuro -->
+    <script>
+        // Función para manejar el cambio de tema
+        function initThemeToggle() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const htmlRoot = document.getElementById('html-root');
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
+            
+            // Verificar tema guardado en localStorage o usar tema del sistema
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Determinar tema inicial
+            let currentTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+            
+            // Aplicar tema inicial
+            applyTheme(currentTheme);
+            
+            // Event listener para el botón de toggle
+            themeToggle.addEventListener('click', function() {
+                currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+                applyTheme(currentTheme);
+                localStorage.setItem('theme', currentTheme);
+            });
+            
+            // Función para aplicar el tema
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    htmlRoot.classList.add('dark');
+                    sunIcon.classList.remove('hidden');  // Mostrar sol en modo oscuro
+                    moonIcon.classList.add('hidden');    // Ocultar luna en modo oscuro
+                    themeToggle.title = 'Cambiar a modo claro';
+                } else {
+                    htmlRoot.classList.remove('dark');
+                    sunIcon.classList.add('hidden');     // Ocultar sol en modo claro
+                    moonIcon.classList.remove('hidden'); // Mostrar luna en modo claro
+                    themeToggle.title = 'Cambiar a modo oscuro';
+                }
+            }
+            
+            // Escuchar cambios en la preferencia del sistema
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                if (!localStorage.getItem('theme')) {
+                    currentTheme = e.matches ? 'dark' : 'light';
+                    applyTheme(currentTheme);
+                }
+            });
+        }
+        
+        // Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', initThemeToggle);
+        
+        // También inicializar inmediatamente para evitar flash
+        if (document.readyState === 'loading') {
+            // El DOM aún se está cargando
+            document.addEventListener('DOMContentLoaded', initThemeToggle);
+        } else {
+            // El DOM ya está listo
+            initThemeToggle();
+        }
+    </script>
     
     <!-- Enlace al archivo JavaScript estático -->
     <script src="{% static 'Tareas/js/main.js' %}"></script>
