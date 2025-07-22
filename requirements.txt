@@ -29,6 +29,13 @@ sqlparse>=0.4.2
 # tzdata - Datos de zona horaria (necesario en Windows)
 tzdata>=2021.1
 
+# ===== DEPENDENCIAS ADICIONALES =====
+# requests - Para realizar peticiones HTTP
+requests>=2.31.0
+
+# Pillow - Manejo de imágenes (necesario para ImageField)
+Pillow>=10.0.0
+
 # ===== DEPENDENCIAS OPCIONALES PARA DESARROLLO =====
 # Descomenta las siguientes líneas si quieres herramientas adicionales
 
