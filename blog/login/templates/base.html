@@ -11,7 +11,7 @@
     <h2>Blog Inicio</h2>
     <ul>
         <li><a href={% url 'home' %}>Inicio</a></li>
-        {% comment %} <li><a href={% url 'login' %}>Login</a></li> {% endcomment %}
+        <li><a href={% url 'login' %}>Login</a></li>
         {% if request.user.is_authenticated %}
             <li><a href={% url 'exit' %}>Salir</a></li>
         {% else %}
