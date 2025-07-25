@@ -160,12 +160,16 @@
   <nav>
     <div class="logo">Grupo 5</div>
     <div class="nav-links">
-      <a href="index.html">Inicio</a>
+      <a href={% url 'home' %}>Inicio</a>
       <a href="noticias.html">Noticias</a>
       <a href="juegos.html">Juegos</a>
       <a href="reseñas.html">Reseñas</a>
       <a href="usuarios.html">Usuarios</a>
-      <a href="login.html">Login</a>
+      {% if request.user.is_authenticated %}
+            <a href={% url 'exit' %}>Salir</a>
+        {% else %}
+            <a href={% url 'login' %}>ingresar</a>
+        {% endif %}
     </div>
   </nav>
 
